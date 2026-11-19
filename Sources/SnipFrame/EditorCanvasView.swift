@@ -7,7 +7,7 @@ protocol EditorCanvasDelegate: AnyObject {
 }
 
 /// The annotation canvas. Coordinates are in points; export renders at native pixels.
-final class EditorCanvasView: NSView, NSTextFieldDelegate {
+final class EditorCanvasView: NSView, NSTextFieldDelegate, NSUserInterfaceValidations {
 
     let baseImage: NSImage
     let baseCGImage: CGImage
@@ -23,6 +23,7 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
 
     private(set) var annotations: [Annotation] = []
     private var undoStack: [[Annotation]] = []
+    private let historyLimit = 100
     private var redoStack: [[Annotation]] = []
     private var erasing = false
     private var eraseSnapshot: [Annotation] = []
@@ -106,7 +107,7 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
         if erasing {
             erasing = false
             if didErase {
-                undoStack.append(eraseSnapshot)
+                pushHistory(eraseSnapshot)
                 redoStack.removeAll()
                 delegate?.canvasDidEdit(self)
             }
@@ -128,12 +129,33 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
         needsDisplay = true
     }
 
+    var canUndo: Bool { !undoStack.isEmpty }
+    var canRedo: Bool { !redoStack.isEmpty }
+
+    private func pushHistory(_ snapshot: [Annotation]) {
+        undoStack.append(snapshot)
+        if undoStack.count > historyLimit {
+            undoStack.removeFirst(undoStack.count - historyLimit)
+        }
+    }
+
     private func commit(_ annotation: Annotation) {
-        undoStack.append(annotations)
+        pushHistory(annotations)
         annotations.append(annotation)
         redoStack.removeAll()
         delegate?.canvasDidEdit(self)
         needsDisplay = true
+    }
+
+    /// Menü ve araç çubuğu için: metin düzenlenirken alan editörü önceliklidir.
+    @objc func undo(_ sender: Any?) { undo() }
+
+    @objc func redo(_ sender: Any?) { redo() }
+
+    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        if item.action == #selector(undo(_:)) { return canUndo }
+        if item.action == #selector(redo(_:)) { return canRedo }
+        return true
     }
 
     @objc func undo() {

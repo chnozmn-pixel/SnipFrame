@@ -46,6 +46,8 @@
 "editor.title" = "SnipFrame — Édition";
 "editor.copy" = "Copier";
 "editor.save" = "Enregistrer…";
+"editor.undo.tooltip" = "Annuler (⌘Z)";
+"editor.redo.tooltip" = "Rétablir (⇧⌘Z)";
 "editor.copy.tooltip" = "Copier l’image dans le presse-papiers (⌘C)";
 "editor.save.tooltip" = "Enregistrer en PNG (⌘S)";
 "editor.copied" = "Copié dans le presse-papiers ✓";

@@ -21,7 +21,7 @@ Harici bağımlılık yok; sadece Apple çatısı (AppKit, CoreGraphics, Carbon)
 | Renk & kalınlık | Renk seçici + çizgi kalınlığı kaydırıcısı |
 | Araç seçimi | Ana pencereden varsayılan anotasyon aracı seçilir; editör o araçla açılır |
 | Tema | Logoya uygun nötr grafit/gümüş palet; açık ve koyu görünüme uyarlanır |
-| Geri al / yinele | ⌘Z / ⌘⇧Z |
+| Geri al / yinele | Araç çubuğu düğmeleri ve ⌘Z / ⇧⌘Z; metin yazarken yazı alanının kendi geçmişi kullanılır |
 | Çıktı | ⌘C ile panoya kopyala, ⌘S ile PNG kaydet (varsayılan: Masaüstü) |
 | Ana pencere | Dock simgesine tıklayınca açılır; gradyan "Yeni Yakalama" düğmesi, Pencere / Tam Ekran kartları, gecikme seçimi |
 | Uygulama simgesi | `Resources/AppIconSource.png`'den üretilir; `swift scripts/make-icon.swift` → `AppIcon.icns` + `AppGlyph.png` |

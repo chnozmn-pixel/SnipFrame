@@ -46,6 +46,8 @@
 "editor.title" = "SnipFrame — Bearbeiten";
 "editor.copy" = "Kopieren";
 "editor.save" = "Sichern…";
+"editor.undo.tooltip" = "Widerrufen (⌘Z)";
+"editor.redo.tooltip" = "Wiederholen (⇧⌘Z)";
 "editor.copy.tooltip" = "Bild in die Zwischenablage kopieren (⌘C)";
 "editor.save.tooltip" = "Als PNG sichern (⌘S)";
 "editor.copied" = "In die Zwischenablage kopiert ✓";

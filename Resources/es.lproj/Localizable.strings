@@ -46,6 +46,8 @@
 "editor.title" = "SnipFrame — Editar";
 "editor.copy" = "Copiar";
 "editor.save" = "Guardar…";
+"editor.undo.tooltip" = "Deshacer (⌘Z)";
+"editor.redo.tooltip" = "Rehacer (⇧⌘Z)";
 "editor.copy.tooltip" = "Copiar la imagen al portapapeles (⌘C)";
 "editor.save.tooltip" = "Guardar como PNG (⌘S)";
 "editor.copied" = "Copiado al portapapeles ✓";

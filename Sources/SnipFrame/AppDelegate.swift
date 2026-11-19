@@ -21,6 +21,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setupMainWindow()
         showMainWindow(nil)
         registerHotkey()
+
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -213,8 +214,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let editMenuItem = NSMenuItem()
         let editMenu = NSMenu(title: L("menu.edit", "Edit"))
-        editMenu.addItem(withTitle: L("menu.undo", "Undo"), action: #selector(EditorCanvasView.undo), keyEquivalent: "z")
-        let redoItem = editMenu.addItem(withTitle: L("menu.redo", "Redo"), action: #selector(EditorCanvasView.redo), keyEquivalent: "z")
+        editMenu.addItem(withTitle: L("menu.undo", "Undo"), action: #selector(EditorCanvasView.undo(_:)), keyEquivalent: "z")
+        let redoItem = editMenu.addItem(withTitle: L("menu.redo", "Redo"), action: #selector(EditorCanvasView.redo(_:)), keyEquivalent: "z")
         redoItem.keyEquivalentModifierMask = [.command, .shift]
         editMenu.addItem(.separator())
         editMenu.addItem(withTitle: L("menu.copy", "Copy"), action: #selector(EditorWindowController.copyImage), keyEquivalent: "c")

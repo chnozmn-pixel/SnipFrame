@@ -46,6 +46,8 @@
 "editor.title" = "SnipFrame — Düzenle";
 "editor.copy" = "Kopyala";
 "editor.save" = "Kaydet…";
+"editor.undo.tooltip" = "Geri al (⌘Z)";
+"editor.redo.tooltip" = "Yinele (⇧⌘Z)";
 "editor.copy.tooltip" = "Görüntüyü panoya kopyala (⌘C)";
 "editor.save.tooltip" = "PNG olarak kaydet (⌘S)";
 "editor.copied" = "Panoya kopyalandı ✓";

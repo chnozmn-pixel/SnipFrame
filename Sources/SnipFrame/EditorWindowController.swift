@@ -1,13 +1,15 @@
 import AppKit
 import UniformTypeIdentifiers
 
-final class EditorWindowController: NSWindowController, NSWindowDelegate, EditorCanvasDelegate {
+final class EditorWindowController: NSWindowController, NSWindowDelegate, EditorCanvasDelegate, NSUserInterfaceValidations {
 
     private let canvas: EditorCanvasView
     private var toolControl: NSSegmentedControl!
     private var colorWell: NSColorWell!
     private var widthSlider: NSSlider!
     private var statusLabel: NSTextField!
+    private var undoButton: NSButton!
+    private var redoButton: NSButton!
 
     var onClose: (() -> Void)?
 
@@ -28,7 +30,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
 
         let visible = NSScreen.main?.visibleFrame.size ?? NSSize(width: 1200, height: 800)
         let toolbarHeight: CGFloat = 46
-        let width = min(max(image.size.width, 480), visible.width * 0.9)
+        // Araç çubuğu (geri al/yinele, 8 araç, renk, kalınlık, kopyala/kaydet) tek satıra sığmalı.
+        let toolbarMinimumWidth: CGFloat = 700
+        let width = min(max(image.size.width, toolbarMinimumWidth), visible.width * 0.9)
         let height = min(max(image.size.height, 240), visible.height * 0.9 - toolbarHeight) + toolbarHeight
 
         let window = NSWindow(
@@ -75,6 +79,23 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
             toolControl.setToolTip(tool.title, forSegment: index)
         }
 
+        undoButton = historyButton(
+            symbol: "arrow.uturn.backward",
+            tooltip: L("editor.undo.tooltip", "Undo (⌘Z)"),
+            action: #selector(undoAction)
+        )
+        redoButton = historyButton(
+            symbol: "arrow.uturn.forward",
+            tooltip: L("editor.redo.tooltip", "Redo (⇧⌘Z)"),
+            action: #selector(redoAction)
+        )
+
+        let historyDivider = NSBox()
+        historyDivider.boxType = .separator
+        historyDivider.translatesAutoresizingMaskIntoConstraints = false
+        historyDivider.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        historyDivider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
         colorWell = NSColorWell()
         colorWell.color = initialColor
         colorWell.target = self
@@ -104,7 +125,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
         saveButton.bezelStyle = .rounded
         saveButton.toolTip = L("editor.save.tooltip", "Save as PNG (⌘S)")
 
-        [toolControl, colorWell, widthSlider, spacer, statusLabel, copyButton, saveButton].forEach {
+        [undoButton, redoButton, historyDivider, toolControl, colorWell, widthSlider,
+         spacer, statusLabel, copyButton, saveButton].forEach {
             toolbar.addArrangedSubview($0)
         }
 
@@ -137,9 +159,76 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
             scroll.trailingAnchor.constraint(equalTo: content.trailingAnchor),
             scroll.bottomAnchor.constraint(equalTo: content.bottomAnchor)
         ])
+
+        updateHistoryButtons()
+        window.makeFirstResponder(canvas)
+    }
+
+    private func historyButton(symbol: String, tooltip: String, action: Selector) -> NSButton {
+        let button = NSButton(frame: .zero)
+        button.bezelStyle = .texturedRounded
+        button.isBordered = true
+        button.imagePosition = .imageOnly
+        button.image = NSImage(systemSymbolName: symbol, accessibilityDescription: tooltip)
+        button.toolTip = tooltip
+        button.target = self
+        button.action = action
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 34).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        return button
+    }
+
+    private func updateHistoryButtons() {
+        undoButton?.isEnabled = canvas.canUndo
+        redoButton?.isEnabled = canvas.canRedo
     }
 
     // MARK: - Actions
+
+    /// Menüden gelen ⌘Z / ⇧⌘Z. Metin düzenleniyorsa önce yazı alanının geçmişi kullanılır.
+    @objc func undo(_ sender: Any?) {
+        if let editor = activeFieldEditor {
+            editor.undoManager?.undo()
+        } else {
+            canvas.undo()
+        }
+        updateHistoryButtons()
+    }
+
+    @objc func redo(_ sender: Any?) {
+        if let editor = activeFieldEditor {
+            editor.undoManager?.redo()
+        } else {
+            canvas.redo()
+        }
+        updateHistoryButtons()
+    }
+
+    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        if item.action == #selector(undo(_:)) {
+            return activeFieldEditor?.undoManager?.canUndo ?? canvas.canUndo
+        }
+        if item.action == #selector(redo(_:)) {
+            return activeFieldEditor?.undoManager?.canRedo ?? canvas.canRedo
+        }
+        return true
+    }
+
+    private var activeFieldEditor: NSTextView? {
+        guard let editor = window?.firstResponder as? NSTextView, editor.isFieldEditor else { return nil }
+        return editor
+    }
+
+    @objc private func undoAction() {
+        canvas.undo()
+        updateHistoryButtons()
+    }
+
+    @objc private func redoAction() {
+        canvas.redo()
+        updateHistoryButtons()
+    }
 
     @objc private func toolChanged(_ sender: NSSegmentedControl) {
         canvas.tool = EditorTool(rawValue: sender.selectedSegment) ?? .pen
@@ -208,7 +297,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
     // MARK: - EditorCanvasDelegate
 
     func canvasDidEdit(_ canvas: EditorCanvasView) {
-        // Hook for future toolbar state (undo/redo buttons).
+        updateHistoryButtons()
     }
 
     func canvasDidRequestCopy(_ canvas: EditorCanvasView) {

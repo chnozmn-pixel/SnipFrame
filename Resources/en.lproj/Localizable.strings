@@ -46,6 +46,8 @@
 "editor.title" = "SnipFrame — Edit";
 "editor.copy" = "Copy";
 "editor.save" = "Save…";
+"editor.undo.tooltip" = "Undo (⌘Z)";
+"editor.redo.tooltip" = "Redo (⇧⌘Z)";
 "editor.copy.tooltip" = "Copy image to clipboard (⌘C)";
 "editor.save.tooltip" = "Save as PNG (⌘S)";
 "editor.copied" = "Copied to clipboard ✓";
