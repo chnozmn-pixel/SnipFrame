@@ -8,6 +8,27 @@ Repository: <https://github.com/chnozmn-pixel/SnipFrame>
 
 No third-party dependencies; only Apple frameworks (AppKit, CoreGraphics, Carbon).
 
+## Screenshots
+
+| Main window | Annotation editor |
+| --- | --- |
+| ![Main window](docs/screenshots/main-window.png) | ![Editor with annotations](docs/screenshots/editor.png) |
+
+## Install
+
+1. Download `SnipFrame-1.1.0-macOS.zip` from
+   [Releases](https://github.com/chnozmn-pixel/SnipFrame/releases/latest), unzip it and move
+   `SnipFrame.app` to `/Applications`.
+2. Clear the quarantine flag once (see [First launch](#first-launch-is-blocked-by-gatekeeper))
+   or right-click the app → **Open**.
+3. Grant Screen Recording permission on the first capture.
+
+With Homebrew (the project's own tap, not `homebrew/cask`):
+
+```bash
+brew install --cask chnozmn-pixel/snipframe/snipframe
+```
+
 ## Features
 
 | Feature | Description |
@@ -71,7 +92,7 @@ On macOS 15 and later, if right-click → Open is not offered, use
 **System Settings → Privacy & Security → Open Anyway** right after the blocked attempt.
 
 > Downloading with `curl` instead of a browser skips the quarantine flag entirely:
-> `curl -L -o SnipFrame.zip https://github.com/chnozmn-pixel/SnipFrame/releases/latest/download/SnipFrame-1.0.0-macOS.zip`
+> `curl -L -o SnipFrame.zip https://github.com/chnozmn-pixel/SnipFrame/releases/latest/download/SnipFrame-1.1.0-macOS.zip`
 
 To remove the warning for everyone, the app has to be signed with a Developer ID certificate and
 notarized by Apple.
@@ -118,9 +139,15 @@ Sources/SnipFrame/
   EditorCanvasView.swift            canvas, drawing input, text, undo, export
   CanvasRenderer.swift              annotation model + shared drawing engine
   CanvasContainerView.swift         flipped container for scrolling
+docs/screenshots/                   README screenshots
+LICENSE                             MIT license
 ```
 
 ## Known limitations
 
 - No free-form (lasso) selection and no video recording — see the roadmap in `PLAN.md`.
 - The app is ad-hoc signed, so Gatekeeper may warn on first launch.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
