@@ -60,11 +60,12 @@ public sealed class AnnotationCanvas : FrameworkElement
         RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
         dc.DrawImage(BaseImage, target);
 
-        AnnotationRenderer.Draw(dc, _annotations, BaseImage);
+        var dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+        AnnotationRenderer.Draw(dc, _annotations, BaseImage, dpi);
 
         if (_current is not null)
         {
-            AnnotationRenderer.Draw(dc, new[] { _current }, BaseImage);
+            AnnotationRenderer.Draw(dc, new[] { _current }, BaseImage, dpi);
         }
     }
 

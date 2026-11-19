@@ -167,7 +167,7 @@ public partial class MainWindow : Window
     private void OnShortcutClick(object sender, MouseButtonEventArgs e)
     {
         _recordingHotkey = true;
-        ShortcutText.Text = "Press keys…";
+        ShortcutText.Text = L.T("hotkey.press", "Press keys…");
         ShortcutBox.BorderBrush = (System.Windows.Media.Brush)FindResource("TextBrush");
         Focus();
         Keyboard.Focus(this);
@@ -199,7 +199,7 @@ public partial class MainWindow : Window
         var binding = HotkeyManager.FromKeyEvent(e.Key, Keyboard.Modifiers);
         if (!HotkeyManager.IsValid(binding))
         {
-            ShortcutText.Text = "Ctrl/Alt/Shift + key";
+            ShortcutText.Text = L.T("hotkey.needsModifier", "Ctrl/Alt/Shift + letter");
             return;
         }
 

@@ -40,6 +40,8 @@
   <data name="tool.text" xml:space="preserve"><value>Metin</value></data>
   <data name="tool.eraser" xml:space="preserve"><value>Silgi</value></data>
 
+  <data name="hotkey.press" xml:space="preserve"><value>Tuşlara basın…</value></data>
+  <data name="hotkey.needsModifier" xml:space="preserve"><value>Ctrl/Alt/Shift + harf</value></data>
   <data name="capture.regionHint" xml:space="preserve"><value>Alan seçmek için sürükleyin  ·  Esc ile iptal</value></data>
   <data name="capture.windowHint" xml:space="preserve"><value>Yakalamak için bir pencereye tıklayın  ·  Esc ile iptal</value></data>
   <data name="capture.tooSmall" xml:space="preserve"><value>Seçim çok küçük</value></data>
@@ -52,6 +54,7 @@
   <data name="editor.redo" xml:space="preserve"><value>Yinele (Ctrl+Y)</value></data>
   <data name="editor.copied" xml:space="preserve"><value>Panoya kopyalandı ✓</value></data>
   <data name="editor.saved" xml:space="preserve"><value>Kaydedildi ✓</value></data>
+  <data name="editor.color" xml:space="preserve"><value>Renk</value></data>
   <data name="editor.lineWidth" xml:space="preserve"><value>Çizgi kalınlığı</value></data>
   <data name="editor.textPlaceholder" xml:space="preserve"><value>Yazın ve Enter'a basın</value></data>
   <data name="editor.saveFailed" xml:space="preserve"><value>Görsel kaydedilemedi</value></data>

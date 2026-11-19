@@ -41,6 +41,8 @@
   <data name="tool.text" xml:space="preserve"><value>Text</value></data>
   <data name="tool.eraser" xml:space="preserve"><value>Eraser</value></data>
 
+  <data name="hotkey.press" xml:space="preserve"><value>Press keys…</value></data>
+  <data name="hotkey.needsModifier" xml:space="preserve"><value>Ctrl/Alt/Shift + letter</value></data>
   <data name="capture.regionHint" xml:space="preserve"><value>Drag to select an area  ·  Esc to cancel</value></data>
   <data name="capture.windowHint" xml:space="preserve"><value>Click a window to capture it  ·  Esc to cancel</value></data>
   <data name="capture.tooSmall" xml:space="preserve"><value>Selection is too small</value></data>
@@ -53,6 +55,7 @@
   <data name="editor.redo" xml:space="preserve"><value>Redo (Ctrl+Y)</value></data>
   <data name="editor.copied" xml:space="preserve"><value>Copied to clipboard ✓</value></data>
   <data name="editor.saved" xml:space="preserve"><value>Saved ✓</value></data>
+  <data name="editor.color" xml:space="preserve"><value>Color</value></data>
   <data name="editor.lineWidth" xml:space="preserve"><value>Line width</value></data>
   <data name="editor.textPlaceholder" xml:space="preserve"><value>Type and press Enter</value></data>
   <data name="editor.saveFailed" xml:space="preserve"><value>Could not save the image</value></data>

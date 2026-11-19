@@ -51,7 +51,7 @@ public sealed class Annotation
 
 public static class AnnotationRenderer
 {
-    public static void Draw(DrawingContext dc, IReadOnlyList<Annotation> items, BitmapSource baseImage)
+    public static void Draw(DrawingContext dc, IReadOnlyList<Annotation> items, BitmapSource baseImage, double pixelsPerDip = 1.0)
     {
         foreach (var item in items)
         {
@@ -106,7 +106,7 @@ public static class AnnotationRenderer
                         typeface,
                         Math.Max(10, item.Width),
                         new SolidColorBrush(item.Color),
-                        VisualTreeHelper.GetDpi(new DrawingVisual()).PixelsPerDip);
+                        pixelsPerDip);
                     dc.DrawText(formatted, item.Points[0]);
                     break;
                 }
@@ -178,9 +178,7 @@ public static class AnnotationRenderer
             var isStroke = item.Tool is EditorTool.Pen or EditorTool.Highlighter;
             if (!isStroke)
             {
-                var hit = item.Tool is EditorTool.Text
-                    ? item.Points.Count > 0 && Rect.Inflate(item.Bounds, radius, radius).Contains(center)
-                    : Rect.Inflate(item.Bounds, radius, radius).Contains(center);
+                var hit = item.Points.Count > 0 && Rect.Inflate(item.Bounds, radius, radius).Contains(center);
                 if (hit)
                 {
                     changed = true;

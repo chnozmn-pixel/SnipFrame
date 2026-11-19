@@ -42,7 +42,7 @@ public partial class EditorWindow : Window
         UndoButton.ToolTip = L.T("editor.undo", "Undo (Ctrl+Z)");
         RedoButton.ToolTip = L.T("editor.redo", "Redo (Ctrl+Y)");
         WidthSlider.ToolTip = L.T("editor.lineWidth", "Line width");
-        ColorSwatch.ToolTip = L.T("label.tool", "Tool");
+        ColorSwatch.ToolTip = L.T("editor.color", "Color");
 
         Surface.BaseImage = image;
         Surface.Tool = tool;
