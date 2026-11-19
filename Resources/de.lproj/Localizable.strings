@@ -1,0 +1,63 @@
+"app.tagline" = "Aufnehmen, markieren, teilen.";
+"action.new" = "Neuer Ausschnitt";
+"action.window" = "Fenster";
+"action.window.caption" = "Ein einzelnes Fenster";
+"action.fullScreen" = "Ganzer Bildschirm";
+"action.fullScreen.caption" = "Den ganzen Bildschirm";
+
+"label.delay" = "Verzögerung";
+"delay.none" = "Keine";
+"delay.3" = "3 Sekunden";
+"delay.5" = "5 Sekunden";
+
+"label.shortcut" = "Kurzbefehl";
+"shortcut.reset" = "Zurücksetzen";
+"shortcut.recording" = "Tasten drücken…";
+"shortcut.conflict" = "Dieser Kurzbefehl wird bereits von einer anderen App verwendet.";
+"shortcut.needsModifier" = "Der Kurzbefehl muss ⌘, ⌥ oder ⌃ enthalten.";
+
+"status.tooltip" = "SnipFrame — %@ für einen Bereich";
+
+"menu.openWindow" = "Hauptfenster öffnen";
+"menu.region" = "Bereich aufnehmen";
+"menu.window" = "Fenster aufnehmen";
+"menu.fullScreen" = "Bildschirm aufnehmen";
+"menu.delay" = "Verzögerung";
+"menu.about" = "Über SnipFrame";
+"menu.quit" = "Beenden";
+"menu.hide" = "SnipFrame ausblenden";
+"menu.edit" = "Bearbeiten";
+"menu.undo" = "Widerrufen";
+"menu.redo" = "Wiederholen";
+"menu.copy" = "Kopieren";
+"menu.save" = "Sichern…";
+"menu.minimize" = "Im Dock ablegen";
+"menu.close" = "Schließen";
+
+"permission.title" = "Bildschirmaufnahme erlauben";
+"permission.body" = "SnipFrame benötigt die Berechtigung „Bildschirmaufnahme“, um Screenshots zu erstellen.\n\nÖffne Systemeinstellungen > Datenschutz & Sicherheit > Bildschirmaufnahme, aktiviere SnipFrame und starte die App neu.";
+"permission.openSettings" = "Systemeinstellungen öffnen";
+"permission.ok" = "OK";
+
+"about.body" = "Ein Screenshot-Tool im Stil von Snipping Tool für macOS.\n\n%@ — Bereich aufnehmen (im Hauptfenster änderbar)\nMenüleistensymbol für Fenster / ganzer Bildschirm.\n\nIm Editor: ⌘C kopieren, ⌘S sichern, ⌘Z widerrufen, ⌘⇧Z wiederholen, Esc schließen.";
+
+"editor.title" = "SnipFrame — Bearbeiten";
+"editor.copy" = "Kopieren";
+"editor.save" = "Sichern…";
+"editor.copy.tooltip" = "Bild in die Zwischenablage kopieren (⌘C)";
+"editor.save.tooltip" = "Als PNG sichern (⌘S)";
+"editor.copied" = "In die Zwischenablage kopiert ✓";
+"editor.saveFailed" = "Sichern fehlgeschlagen";
+"editor.textPlaceholder" = "Text eingeben und Enter drücken";
+"editor.lineWidth" = "Linienstärke";
+
+"save.fileName" = "Bildschirmfoto %@.png";
+"date.format" = "yyyy-MM-dd 'um' HH-mm-ss";
+
+"tool.pen" = "Stift";
+"tool.highlighter" = "Textmarker";
+"tool.arrow" = "Pfeil";
+"tool.rectangle" = "Rechteck";
+"tool.ellipse" = "Ellipse";
+"tool.pixelate" = "Mosaik";
+"tool.text" = "Text";

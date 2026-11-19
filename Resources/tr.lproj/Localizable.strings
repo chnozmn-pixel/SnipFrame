@@ -1,0 +1,63 @@
+"app.tagline" = "Yakala, işaretle, paylaş.";
+"action.new" = "Yeni Yakalama";
+"action.window" = "Pencere";
+"action.window.caption" = "Tek bir pencereyi al";
+"action.fullScreen" = "Tam Ekran";
+"action.fullScreen.caption" = "Ekranın tamamını al";
+
+"label.delay" = "Gecikme";
+"delay.none" = "Yok";
+"delay.3" = "3 saniye";
+"delay.5" = "5 saniye";
+
+"label.shortcut" = "Kısayol";
+"shortcut.reset" = "Sıfırla";
+"shortcut.recording" = "Tuşlara basın…";
+"shortcut.conflict" = "Bu kısayol başka bir uygulama tarafından kullanılıyor.";
+"shortcut.needsModifier" = "Kısayolda ⌘, ⌥ veya ⌃ bulunmalı.";
+
+"status.tooltip" = "SnipFrame — bölge yakalamak için %@";
+
+"menu.openWindow" = "Ana Pencereyi Aç";
+"menu.region" = "Bölge Yakala";
+"menu.window" = "Pencere Yakala";
+"menu.fullScreen" = "Tam Ekran Yakala";
+"menu.delay" = "Gecikme";
+"menu.about" = "SnipFrame Hakkında";
+"menu.quit" = "Çıkış";
+"menu.hide" = "SnipFrame'i Gizle";
+"menu.edit" = "Düzen";
+"menu.undo" = "Geri Al";
+"menu.redo" = "Yinele";
+"menu.copy" = "Kopyala";
+"menu.save" = "Kaydet…";
+"menu.minimize" = "Küçült";
+"menu.close" = "Kapat";
+
+"permission.title" = "Ekran Kaydı İzni Gerekli";
+"permission.body" = "SnipFrame ekran görüntüsü alabilmek için “Ekran Kaydı” iznine ihtiyaç duyar.\n\nSistem Ayarları > Gizlilik ve Güvenlik > Ekran Kaydı bölümünde SnipFrame'i açıp uygulamayı yeniden başlatın.";
+"permission.openSettings" = "Sistem Ayarlarını Aç";
+"permission.ok" = "Tamam";
+
+"about.body" = "Windows Snipping Tool benzeri macOS ekran görüntüsü aracı.\n\n%@ — bölge yakala (ana pencereden değiştirilebilir)\nMenü çubuğu simgesi: pencere / tam ekran.\n\nEditörde: ⌘C kopyala, ⌘S kaydet, ⌘Z geri al, ⌘⇧Z yinele, Esc kapat.";
+
+"editor.title" = "SnipFrame — Düzenle";
+"editor.copy" = "Kopyala";
+"editor.save" = "Kaydet…";
+"editor.copy.tooltip" = "Görüntüyü panoya kopyala (⌘C)";
+"editor.save.tooltip" = "PNG olarak kaydet (⌘S)";
+"editor.copied" = "Panoya kopyalandı ✓";
+"editor.saveFailed" = "Kaydedilemedi";
+"editor.textPlaceholder" = "Metin yazıp Enter'a bas";
+"editor.lineWidth" = "Çizgi kalınlığı";
+
+"save.fileName" = "Ekran Görüntüsü %@.png";
+"date.format" = "yyyy-MM-dd 'saat' HH-mm-ss";
+
+"tool.pen" = "Kalem";
+"tool.highlighter" = "Fosforlu Kalem";
+"tool.arrow" = "Ok";
+"tool.rectangle" = "Dikdörtgen";
+"tool.ellipse" = "Elips";
+"tool.pixelate" = "Mozaik";
+"tool.text" = "Metin";

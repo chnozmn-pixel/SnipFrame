@@ -1,0 +1,63 @@
+"app.tagline" = "Capturer, annoter, partager.";
+"action.new" = "Nouvelle capture";
+"action.window" = "Fenêtre";
+"action.window.caption" = "Une seule fenêtre";
+"action.fullScreen" = "Plein écran";
+"action.fullScreen.caption" = "Tout l’écran";
+
+"label.delay" = "Délai";
+"delay.none" = "Aucun";
+"delay.3" = "3 secondes";
+"delay.5" = "5 secondes";
+
+"label.shortcut" = "Raccourci";
+"shortcut.reset" = "Réinitialiser";
+"shortcut.recording" = "Appuyez sur les touches…";
+"shortcut.conflict" = "Ce raccourci est déjà utilisé par une autre app.";
+"shortcut.needsModifier" = "Le raccourci doit inclure ⌘, ⌥ ou ⌃.";
+
+"status.tooltip" = "SnipFrame — %@ pour capturer une zone";
+
+"menu.openWindow" = "Ouvrir la fenêtre principale";
+"menu.region" = "Capturer une zone";
+"menu.window" = "Capturer une fenêtre";
+"menu.fullScreen" = "Capturer l’écran";
+"menu.delay" = "Délai";
+"menu.about" = "À propos de SnipFrame";
+"menu.quit" = "Quitter";
+"menu.hide" = "Masquer SnipFrame";
+"menu.edit" = "Édition";
+"menu.undo" = "Annuler";
+"menu.redo" = "Rétablir";
+"menu.copy" = "Copier";
+"menu.save" = "Enregistrer…";
+"menu.minimize" = "Réduire";
+"menu.close" = "Fermer";
+
+"permission.title" = "Autorisation d’enregistrement de l’écran requise";
+"permission.body" = "SnipFrame a besoin de l’autorisation « Enregistrement de l’écran » pour faire des captures.\n\nOuvrez Réglages Système > Confidentialité et sécurité > Enregistrement de l’écran, activez SnipFrame puis relancez l’app.";
+"permission.openSettings" = "Ouvrir Réglages Système";
+"permission.ok" = "OK";
+
+"about.body" = "Une app de capture d’écran dans l’esprit de Snipping Tool, pour macOS.\n\n%@ — capturer une zone (modifiable dans la fenêtre principale)\nIcône de la barre des menus : fenêtre / plein écran.\n\nDans l’éditeur : ⌘C copier, ⌘S enregistrer, ⌘Z annuler, ⌘⇧Z rétablir, Échap fermer.";
+
+"editor.title" = "SnipFrame — Édition";
+"editor.copy" = "Copier";
+"editor.save" = "Enregistrer…";
+"editor.copy.tooltip" = "Copier l’image dans le presse-papiers (⌘C)";
+"editor.save.tooltip" = "Enregistrer en PNG (⌘S)";
+"editor.copied" = "Copié dans le presse-papiers ✓";
+"editor.saveFailed" = "Échec de l’enregistrement";
+"editor.textPlaceholder" = "Saisissez le texte puis Entrée";
+"editor.lineWidth" = "Épaisseur du trait";
+
+"save.fileName" = "Capture d’écran %@.png";
+"date.format" = "yyyy-MM-dd 'à' HH-mm-ss";
+
+"tool.pen" = "Stylo";
+"tool.highlighter" = "Surligneur";
+"tool.arrow" = "Flèche";
+"tool.rectangle" = "Rectangle";
+"tool.ellipse" = "Ellipse";
+"tool.pixelate" = "Mosaïque";
+"tool.text" = "Texte";

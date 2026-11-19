@@ -1,0 +1,63 @@
+"app.tagline" = "Capture, mark up, share.";
+"action.new" = "New Snip";
+"action.window" = "Window";
+"action.window.caption" = "Capture a single window";
+"action.fullScreen" = "Full Screen";
+"action.fullScreen.caption" = "Capture the whole display";
+
+"label.delay" = "Delay";
+"delay.none" = "None";
+"delay.3" = "3 seconds";
+"delay.5" = "5 seconds";
+
+"label.shortcut" = "Shortcut";
+"shortcut.reset" = "Reset";
+"shortcut.recording" = "Press keys…";
+"shortcut.conflict" = "That shortcut is already used by another app.";
+"shortcut.needsModifier" = "Include ⌘, ⌥ or ⌃ in the shortcut.";
+
+"status.tooltip" = "SnipFrame — %@ for a region snip";
+
+"menu.openWindow" = "Open Main Window";
+"menu.region" = "Region Snip";
+"menu.window" = "Window Snip";
+"menu.fullScreen" = "Full Screen Snip";
+"menu.delay" = "Delay";
+"menu.about" = "About SnipFrame";
+"menu.quit" = "Quit";
+"menu.hide" = "Hide SnipFrame";
+"menu.edit" = "Edit";
+"menu.undo" = "Undo";
+"menu.redo" = "Redo";
+"menu.copy" = "Copy";
+"menu.save" = "Save…";
+"menu.minimize" = "Minimize";
+"menu.close" = "Close";
+
+"permission.title" = "Screen Recording Permission Needed";
+"permission.body" = "SnipFrame needs the Screen Recording permission to take screenshots.\n\nOpen System Settings > Privacy & Security > Screen Recording, enable SnipFrame, then restart the app.";
+"permission.openSettings" = "Open System Settings";
+"permission.ok" = "OK";
+
+"about.body" = "A Snipping Tool style screenshot app for macOS.\n\n%@ — region snip (change it from the main window)\nMenu bar icon for window / full screen snips.\n\nIn the editor: ⌘C copy, ⌘S save, ⌘Z undo, ⌘⇧Z redo, Esc close.";
+
+"editor.title" = "SnipFrame — Edit";
+"editor.copy" = "Copy";
+"editor.save" = "Save…";
+"editor.copy.tooltip" = "Copy image to clipboard (⌘C)";
+"editor.save.tooltip" = "Save as PNG (⌘S)";
+"editor.copied" = "Copied to clipboard ✓";
+"editor.saveFailed" = "Could not save";
+"editor.textPlaceholder" = "Type and press Enter";
+"editor.lineWidth" = "Line width";
+
+"save.fileName" = "Screenshot %@.png";
+"date.format" = "yyyy-MM-dd 'at' HH-mm-ss";
+
+"tool.pen" = "Pen";
+"tool.highlighter" = "Highlighter";
+"tool.arrow" = "Arrow";
+"tool.rectangle" = "Rectangle";
+"tool.ellipse" = "Ellipse";
+"tool.pixelate" = "Mosaic";
+"tool.text" = "Text";

@@ -1,0 +1,9 @@
+.build/
+build/
+.swiftpm/
+.DS_Store
+*.xcodeproj
+design-preview.png
+menu-bar*.png
+icon-*.png
+.cloud-attachments/

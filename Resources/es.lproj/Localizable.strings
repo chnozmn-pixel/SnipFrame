@@ -1,0 +1,63 @@
+"app.tagline" = "Captura, marca y comparte.";
+"action.new" = "Nueva captura";
+"action.window" = "Ventana";
+"action.window.caption" = "Una sola ventana";
+"action.fullScreen" = "Pantalla completa";
+"action.fullScreen.caption" = "Toda la pantalla";
+
+"label.delay" = "Retardo";
+"delay.none" = "Ninguno";
+"delay.3" = "3 segundos";
+"delay.5" = "5 segundos";
+
+"label.shortcut" = "Atajo";
+"shortcut.reset" = "Restablecer";
+"shortcut.recording" = "Pulsa las teclas…";
+"shortcut.conflict" = "Otra app ya usa ese atajo.";
+"shortcut.needsModifier" = "El atajo debe incluir ⌘, ⌥ o ⌃.";
+
+"status.tooltip" = "SnipFrame — %@ para capturar una zona";
+
+"menu.openWindow" = "Abrir ventana principal";
+"menu.region" = "Capturar zona";
+"menu.window" = "Capturar ventana";
+"menu.fullScreen" = "Capturar pantalla";
+"menu.delay" = "Retardo";
+"menu.about" = "Acerca de SnipFrame";
+"menu.quit" = "Salir";
+"menu.hide" = "Ocultar SnipFrame";
+"menu.edit" = "Edición";
+"menu.undo" = "Deshacer";
+"menu.redo" = "Rehacer";
+"menu.copy" = "Copiar";
+"menu.save" = "Guardar…";
+"menu.minimize" = "Minimizar";
+"menu.close" = "Cerrar";
+
+"permission.title" = "Se necesita permiso de grabación de pantalla";
+"permission.body" = "SnipFrame necesita el permiso «Grabación de pantalla» para hacer capturas.\n\nAbre Ajustes del Sistema > Privacidad y seguridad > Grabación de pantalla, activa SnipFrame y reinicia la app.";
+"permission.openSettings" = "Abrir Ajustes del Sistema";
+"permission.ok" = "OK";
+
+"about.body" = "Una app de capturas al estilo de Snipping Tool para macOS.\n\n%@ — capturar una zona (se cambia en la ventana principal)\nIcono de la barra de menús: ventana / pantalla completa.\n\nEn el editor: ⌘C copiar, ⌘S guardar, ⌘Z deshacer, ⌘⇧Z rehacer, Esc cerrar.";
+
+"editor.title" = "SnipFrame — Editar";
+"editor.copy" = "Copiar";
+"editor.save" = "Guardar…";
+"editor.copy.tooltip" = "Copiar la imagen al portapapeles (⌘C)";
+"editor.save.tooltip" = "Guardar como PNG (⌘S)";
+"editor.copied" = "Copiado al portapapeles ✓";
+"editor.saveFailed" = "No se pudo guardar";
+"editor.textPlaceholder" = "Escribe y pulsa Intro";
+"editor.lineWidth" = "Grosor de línea";
+
+"save.fileName" = "Captura de pantalla %@.png";
+"date.format" = "yyyy-MM-dd 'a las' HH-mm-ss";
+
+"tool.pen" = "Lápiz";
+"tool.highlighter" = "Rotulador";
+"tool.arrow" = "Flecha";
+"tool.rectangle" = "Rectángulo";
+"tool.ellipse" = "Elipse";
+"tool.pixelate" = "Mosaico";
+"tool.text" = "Texto";
