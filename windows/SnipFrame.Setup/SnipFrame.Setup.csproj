@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>SnipFrame.Setup</RootNamespace>
+    <AssemblyName>SnipFrameSetup</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\SnipFrame.Windows\Assets\AppIcon.ico</ApplicationIcon>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Product>SnipFrame</Product>
+    <Company>SnipFrame</Company>
+    <SatelliteResourceLanguages>en;tr</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="..\SnipFrame.Windows\Assets\AppGlyph.png" Link="Assets\AppGlyph.png" />
+    <Resource Include="..\SnipFrame.Windows\Assets\AppIcon.ico" Link="Assets\AppIcon.ico" />
+    <!-- Built by windows/build.ps1 before this project is compiled. -->
+    <EmbeddedResource Include="Payload\SnipFrame.zip" />
+  </ItemGroup>
+
+</Project>

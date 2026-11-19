@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using Forms = System.Windows.Forms;
 
 namespace SnipFrame;
@@ -9,6 +8,7 @@ public sealed class TrayIcon : IDisposable
 {
     private readonly Forms.NotifyIcon _icon;
     private readonly Forms.ContextMenuStrip _menu = new();
+    private readonly Icon _appIcon;
 
     private readonly Forms.ToolStripMenuItem _open;
     private readonly Forms.ToolStripMenuItem _region;
@@ -46,9 +46,11 @@ public sealed class TrayIcon : IDisposable
         _menu.Items.Add(new Forms.ToolStripSeparator());
         _menu.Items.Add(_quit);
 
+        _appIcon = LoadAppIcon();
+
         _icon = new Forms.NotifyIcon
         {
-            Icon = CreateIcon(),
+            Icon = _appIcon,
             Visible = true,
             Text = "SnipFrame",
             ContextMenuStrip = _menu
@@ -88,25 +90,26 @@ public sealed class TrayIcon : IDisposable
         }
     }
 
-    private static Icon CreateIcon()
+    /// <summary>Uses the original macOS app icon so both builds share one identity.</summary>
+    private static Icon LoadAppIcon()
     {
-        using var bitmap = new Bitmap(16, 16);
-        using (var graphics = Graphics.FromImage(bitmap))
+        try
         {
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            graphics.Clear(Color.Transparent);
+            var resource = System.Windows.Application.GetResourceStream(
+                new Uri("pack://application:,,,/Assets/AppIcon.ico", UriKind.Absolute));
 
-            using var background = new SolidBrush(Color.FromArgb(26, 26, 31));
-            graphics.FillRectangle(background, 1, 1, 14, 14);
-
-            using var pen = new Pen(Color.FromArgb(236, 236, 241), 2) { StartCap = LineCap.Round, EndCap = LineCap.Round };
-            graphics.DrawLine(pen, 4, 2, 4, 6);
-            graphics.DrawLine(pen, 4, 2, 8, 2);
-            graphics.DrawLine(pen, 12, 14, 12, 10);
-            graphics.DrawLine(pen, 12, 14, 8, 14);
+            if (resource is not null)
+            {
+                using var stream = resource.Stream;
+                return new Icon(stream, 16, 16);
+            }
+        }
+        catch
+        {
+            // Fall through to the generic icon rather than failing startup.
         }
 
-        return Icon.FromHandle(bitmap.GetHicon());
+        return (Icon)SystemIcons.Application.Clone();
     }
 
     public void Dispose()
@@ -114,5 +117,6 @@ public sealed class TrayIcon : IDisposable
         _icon.Visible = false;
         _icon.Dispose();
         _menu.Dispose();
+        _appIcon.Dispose();
     }
 }

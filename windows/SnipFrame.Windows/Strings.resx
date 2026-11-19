@@ -20,7 +20,7 @@
   <data name="action.region" xml:space="preserve"><value>Region</value></data>
   <data name="action.region.hint" xml:space="preserve"><value>Drag to select an area</value></data>
   <data name="action.window" xml:space="preserve"><value>Window</value></data>
-  <data name="action.window.hint" xml:space="preserve"><value>Click a window</value></data>
+  <data name="action.window.hint" xml:space="preserve"><value>Capture a single window</value></data>
   <data name="action.fullScreen" xml:space="preserve"><value>Full Screen</value></data>
   <data name="action.fullScreen.hint" xml:space="preserve"><value>Capture the whole display</value></data>
   <data name="action.reset" xml:space="preserve"><value>Reset</value></data>

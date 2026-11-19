@@ -3,23 +3,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SnipFrame;
 
 public partial class MainWindow : Window
 {
-    private static readonly (EditorTool Tool, string Glyph)[] ToolGlyphs =
-    {
-        (EditorTool.Pen, "✎"),
-        (EditorTool.Highlighter, "▍"),
-        (EditorTool.Arrow, "↗"),
-        (EditorTool.Rectangle, "▭"),
-        (EditorTool.Ellipse, "◯"),
-        (EditorTool.Mosaic, "▦"),
-        (EditorTool.Text, "A"),
-        (EditorTool.Eraser, "⌫")
-    };
-
     private readonly List<ToggleButton> _toolButtons = new();
     private bool _loading = true;
     private bool _recordingHotkey;
@@ -38,6 +27,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         Settings = settings;
+        WindowTheme.Apply(this);
         ApplyLocalization();
         BuildToolButtons();
         BuildDelayCombo();
@@ -56,10 +46,10 @@ public partial class MainWindow : Window
         HeaderTitle.Text = Title;
         HeaderSubtitle.Text = L.T("app.subtitle", "Capture, mark up, share.");
         NewSnipLabel.Text = L.T("action.newSnip", "New Snip");
-        NewSnipHotkey.Text = HotkeyManager.Format(HotkeyManager.Parse(Settings.Hotkey, new HotkeyBinding(ModifierKeys.Control | ModifierKeys.Shift, Key.X)));
+        NewSnipHotkey.Text = CurrentHotkeyText();
 
         WindowCardTitle.Text = L.T("action.window", "Window");
-        WindowCardHint.Text = L.T("action.window.hint", "Click a window");
+        WindowCardHint.Text = L.T("action.window.hint", "Capture a single window");
         FullCardTitle.Text = L.T("action.fullScreen", "Full Screen");
         FullCardHint.Text = L.T("action.fullScreen.hint", "Capture the whole display");
 
@@ -69,21 +59,25 @@ public partial class MainWindow : Window
         LanguageLabel.Text = L.T("label.language", "Language");
         ResetButton.Content = L.T("action.reset", "Reset");
 
-        ShortcutText.Text = HotkeyManager.Format(HotkeyManager.Parse(Settings.Hotkey, new HotkeyBinding(ModifierKeys.Control | ModifierKeys.Shift, Key.X)));
+        ShortcutText.Text = CurrentHotkeyText();
 
         BuildToolButtons();
     }
+
+    private string CurrentHotkeyText() =>
+        HotkeyManager.Format(HotkeyManager.Parse(Settings.Hotkey,
+            new HotkeyBinding(ModifierKeys.Control | ModifierKeys.Shift, Key.X)));
 
     private void BuildToolButtons()
     {
         ToolPanel.Children.Clear();
         _toolButtons.Clear();
 
-        foreach (var (tool, glyph) in ToolGlyphs)
+        foreach (var tool in Enum.GetValues<EditorTool>())
         {
             var button = new ToggleButton
             {
-                Content = glyph,
+                Content = Icons.Create(Icons.For(tool)),
                 ToolTip = ToolNames.Of(tool),
                 Tag = tool,
                 IsChecked = tool == Settings.Tool,
@@ -128,9 +122,9 @@ public partial class MainWindow : Window
 
     private void OnNewSnipClick(object sender, RoutedEventArgs e) => RegionRequested?.Invoke();
 
-    private void OnWindowCardClick(object sender, MouseButtonEventArgs e) => WindowRequested?.Invoke();
+    private void OnWindowCardClick(object sender, RoutedEventArgs e) => WindowRequested?.Invoke();
 
-    private void OnFullCardClick(object sender, MouseButtonEventArgs e) => FullScreenRequested?.Invoke();
+    private void OnFullCardClick(object sender, RoutedEventArgs e) => FullScreenRequested?.Invoke();
 
     // ---------- settings ----------
 
@@ -168,7 +162,7 @@ public partial class MainWindow : Window
     {
         _recordingHotkey = true;
         ShortcutText.Text = L.T("hotkey.press", "Press keys…");
-        ShortcutBox.BorderBrush = (System.Windows.Media.Brush)FindResource("TextBrush");
+        ShortcutBox.BorderBrush = (Brush)FindResource("TextBrush");
         Focus();
         Keyboard.Focus(this);
     }
@@ -177,11 +171,9 @@ public partial class MainWindow : Window
     {
         if (!_recordingHotkey) return;
         _recordingHotkey = false;
-        ShortcutBox.BorderBrush = (System.Windows.Media.Brush)FindResource("StrokeBrush");
+        ShortcutBox.BorderBrush = (Brush)FindResource("StrokeBrush");
 
-        if (silent)
-            ShortcutText.Text = HotkeyManager.Format(HotkeyManager.Parse(Settings.Hotkey,
-                new HotkeyBinding(ModifierKeys.Control | ModifierKeys.Shift, Key.X)));
+        if (silent) ShortcutText.Text = CurrentHotkeyText();
     }
 
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -207,6 +199,7 @@ public partial class MainWindow : Window
         Settings.Save();
         StopHotkeyRecording(silent: false);
         ShortcutText.Text = Settings.Hotkey;
+        NewSnipHotkey.Text = Settings.Hotkey;
         HotkeyChanged?.Invoke(binding);
     }
 

@@ -12,22 +12,11 @@ namespace SnipFrame;
 
 public partial class EditorWindow : Window
 {
-    private static readonly (EditorTool Tool, string Glyph)[] ToolGlyphs =
-    {
-        (EditorTool.Pen, "✎"),
-        (EditorTool.Highlighter, "▍"),
-        (EditorTool.Arrow, "↗"),
-        (EditorTool.Rectangle, "▭"),
-        (EditorTool.Ellipse, "◯"),
-        (EditorTool.Mosaic, "▦"),
-        (EditorTool.Text, "A"),
-        (EditorTool.Eraser, "⌫")
-    };
+    private const double ToolbarHeight = 46;
 
     private readonly List<ToggleButton> _toolButtons = new();
     private Color _color;
     private TextBox? _textBox;
-    private Point _textOrigin;
     private DispatcherTimer? _statusTimer;
 
     public EditorWindow(BitmapSource image, EditorTool tool, Color color)
@@ -35,6 +24,7 @@ public partial class EditorWindow : Window
         InitializeComponent();
 
         _color = color;
+        WindowTheme.Apply(this);
 
         Title = L.T("editor.title", "SnipFrame — Edit");
         CopyButton.Content = L.T("editor.copy", "Copy");
@@ -43,6 +33,9 @@ public partial class EditorWindow : Window
         RedoButton.ToolTip = L.T("editor.redo", "Redo (Ctrl+Y)");
         WidthSlider.ToolTip = L.T("editor.lineWidth", "Line width");
         ColorSwatch.ToolTip = L.T("editor.color", "Color");
+
+        UndoButton.Content = Icons.Create(Icons.Undo, 15);
+        RedoButton.Content = Icons.Create(Icons.Redo, 15);
 
         Surface.BaseImage = image;
         Surface.Tool = tool;
@@ -68,20 +61,21 @@ public partial class EditorWindow : Window
 
     private double TextFontSize() => 8 + WidthSlider.Value * 2;
 
+    /// <summary>Matches the macOS sizing rule: fit the capture, clamp to the work area.</summary>
     private void SizeToImage(BitmapSource image)
     {
         var work = SystemParameters.WorkArea;
-        Width = Math.Min(Math.Max(image.PixelWidth + 40, 780), work.Width * 0.92);
-        Height = Math.Min(Math.Max(image.PixelHeight + 110, 340), work.Height * 0.92);
+        Width = Math.Min(Math.Max(image.PixelWidth, 700), work.Width * 0.9);
+        Height = Math.Min(Math.Max(image.PixelHeight, 240), work.Height * 0.9 - ToolbarHeight) + ToolbarHeight;
     }
 
     private void BuildToolButtons(EditorTool selected)
     {
-        foreach (var (tool, glyph) in ToolGlyphs)
+        foreach (var tool in Enum.GetValues<EditorTool>())
         {
             var button = new ToggleButton
             {
-                Content = glyph,
+                Content = Icons.Create(Icons.For(tool)),
                 ToolTip = ToolNames.Of(tool),
                 Tag = tool,
                 IsChecked = tool == selected,
@@ -216,14 +210,15 @@ public partial class EditorWindow : Window
     {
         CommitTextInput();
 
-        _textOrigin = origin;
         var box = new TextBox
         {
             Width = 240,
             FontSize = TextFontSize(),
+            FontWeight = FontWeights.SemiBold,
             Foreground = new SolidColorBrush(_color),
-            Background = new SolidColorBrush(Color.FromArgb(210, 20, 20, 24)),
-            BorderBrush = new SolidColorBrush(Color.FromArgb(150, 236, 236, 241)),
+            Background = new SolidColorBrush(Color.FromArgb(200, 20, 20, 24)),
+            BorderBrush = new SolidColorBrush(Color.FromArgb(160, 236, 236, 241)),
+            BorderThickness = new Thickness(1),
             Padding = new Thickness(4, 2, 4, 2),
             AcceptsReturn = false,
             Text = string.Empty

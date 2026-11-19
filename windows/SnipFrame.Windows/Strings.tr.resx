@@ -19,7 +19,7 @@
   <data name="action.region" xml:space="preserve"><value>Bölge</value></data>
   <data name="action.region.hint" xml:space="preserve"><value>Bir alan seçmek için sürükleyin</value></data>
   <data name="action.window" xml:space="preserve"><value>Pencere</value></data>
-  <data name="action.window.hint" xml:space="preserve"><value>Bir pencereye tıklayın</value></data>
+  <data name="action.window.hint" xml:space="preserve"><value>Tek bir pencereyi yakala</value></data>
   <data name="action.fullScreen" xml:space="preserve"><value>Tam Ekran</value></data>
   <data name="action.fullScreen.hint" xml:space="preserve"><value>Tüm ekranı yakala</value></data>
   <data name="action.reset" xml:space="preserve"><value>Sıfırla</value></data>

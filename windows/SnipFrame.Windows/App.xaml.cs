@@ -28,6 +28,14 @@ public partial class App : Application
         base.OnStartup(e);
         ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
+        // The uninstall entry registered by the setup calls the app itself, so the folder can go away.
+        if (e.Args.Any(argument => string.Equals(argument, "--uninstall", StringComparison.OrdinalIgnoreCase)))
+        {
+            Uninstall.Run();
+            Shutdown();
+            return;
+        }
+
         _mutex = new Mutex(true, @"Local\SnipFrame.SingleInstance", out var isFirst);
         if (!isFirst)
         {
@@ -123,7 +131,16 @@ public partial class App : Application
     {
         try
         {
-            var overlay = new CaptureOverlayWindow(mode, CaptureService.GetMonitorAtCursor());
+            var desktop = CaptureService.GetVirtualBounds();
+            var screenshot = CaptureService.Capture(desktop);
+            if (screenshot is null)
+            {
+                ShowCaptureError();
+                return;
+            }
+
+            var overlay = new CaptureOverlayWindow(mode, desktop, screenshot,
+                CaptureService.GetMonitorAtCursor().Scale);
             _overlay = overlay;
 
             overlay.Captured += image =>

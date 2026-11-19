@@ -116,16 +116,18 @@ relaunch the app.
 
 ## Windows
 
-A Windows port lives in `windows/` — the same capture → annotate → copy flow, written in C# / WPF
-on .NET 8. It ships as a portable single-file executable (no installer, no .NET runtime needed).
+A Windows port lives in `windows/` — the same capture → annotate → copy flow, the same graphite
+interface and the same app icon as the macOS build, written in C# / WPF on .NET 8.
 
 ### Install (Windows 10/11)
 
-1. Download `SnipFrame-1.1.0-windows-x64.zip` from
-   [Releases](https://github.com/chnozmn-pixel/SnipFrame/releases/latest) and unzip it anywhere.
-2. Run `SnipFrame.exe`. SmartScreen may warn on the first run because the binary is unsigned —
-   choose **More info → Run anyway**.
-3. Press **Ctrl+Shift+X** from anywhere, or use the tray icon.
+1. Download `SnipFrameSetup-1.1.0.exe` from
+   [Releases](https://github.com/chnozmn-pixel/SnipFrame/releases/latest).
+2. Run the setup and choose **Install**. It installs for the current account (no administrator
+   rights), adds a Start menu shortcut, optionally a desktop shortcut, and registers an uninstall
+   entry in **Settings → Apps**.
+3. SmartScreen may warn because the setup is unsigned — choose **More info → Run anyway**.
+4. Press **Ctrl+Shift+X** from anywhere, or use the tray icon.
 
 ### Build
 
@@ -133,18 +135,27 @@ With the .NET 8 SDK installed:
 
 ```powershell
 cd windows
-.\build.ps1                              # -> windows/dist/SnipFrame.exe
+.\build.ps1                              # -> windows/dist/SnipFrameSetup-1.1.0.exe
 dotnet run --project SnipFrame.Windows    # or run straight from source
 ```
 
-Cross-building from macOS/Linux works as well (the release artifact was produced that way):
+`build.ps1` publishes the app, packs it as the installer payload and publishes
+`SnipFrame.Setup` (the setup window is the same graphite design). Cross-building from macOS/Linux
+works the same way:
 
 ```bash
-dotnet publish windows/SnipFrame.Windows -c Release -r win-x64 --self-contained true \
+cd windows
+mkdir -p dist/app SnipFrame.Setup/Payload
+dotnet publish SnipFrame.Windows -c Release -r win-x64 --self-contained true \
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
-  -p:EnableCompressionInSingleFile=true -o windows/dist
+  -p:EnableCompressionInSingleFile=true -o dist/app
 # Turkish UI strings live in a satellite assembly that single-file publish leaves beside the exe
-mkdir -p windows/dist/tr && cp windows/SnipFrame.Windows/bin/Release/net8.0-windows/win-x64/tr/SnipFrame.resources.dll windows/dist/tr/
+mkdir -p dist/app/tr && cp SnipFrame.Windows/bin/Release/net8.0-windows/win-x64/tr/SnipFrame.resources.dll dist/app/tr/
+(cd dist/app && zip -r -X -q ../../SnipFrame.Setup/Payload/SnipFrame.zip SnipFrame.exe tr)
+dotnet publish SnipFrame.Setup -c Release -r win-x64 --self-contained true \
+  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+  -p:EnableCompressionInSingleFile=true -o dist/setup
+cp dist/setup/SnipFrameSetup.exe dist/SnipFrameSetup-1.1.0.exe
 ```
 
 ### Windows feature set
@@ -153,6 +164,8 @@ mkdir -p windows/dist/tr && cp windows/SnipFrame.Windows/bin/Release/net8.0-wind
 - The same editor: pen, highlighter, arrow, rectangle, ellipse, mosaic, text and eraser, with
   undo/redo (Ctrl+Z / Ctrl+Y), Ctrl+C to the clipboard and Ctrl+S to save a PNG
 - Tray icon, global hotkey with a recorder in the main window, default tool picker
+- The selection overlay covers every monitor in one pass, so a region can span displays and a
+  window on a secondary display can be captured; `SnipFrame.exe --uninstall` removes the install
 - English and Turkish UI (`Strings.resx` + `Strings.tr.resx`), remembered in `%AppData%\SnipFrame\settings.json`
 
 ## Project layout

@@ -14,3 +14,4 @@ windows/**/bin/
 windows/**/obj/
 windows/dist/
 windows/*.zip
+windows/SnipFrame.Setup/Payload/*.zip

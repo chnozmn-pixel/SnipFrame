@@ -2,137 +2,180 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="SnipFrame"
-        Width="528" SizeToContent="Height"
+        Width="486" SizeToContent="Height"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BgBrush}"
-        UseLayoutRounding="True">
+        FontFamily="{StaticResource UiFont}"
+        FontSize="13"
+        Icon="/Assets/AppGlyph.png"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
 
-    <Grid Margin="18,16,18,16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <StackPanel Margin="22,18,22,22">
 
-        <!-- Header -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
-            <Border Width="44" Height="44" CornerRadius="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#F4F4F7" Offset="0" />
-                        <GradientStop Color="#C9C9D1" Offset="1" />
-                    </LinearGradientBrush>
-                </Border.Background>
-                <TextBlock Text="⛶" FontSize="23" Foreground="#1A1A1F"
-                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
-
-            <StackPanel Margin="12,2,0,0">
-                <TextBlock x:Name="HeaderTitle" Text="SnipFrame" FontSize="18" FontWeight="SemiBold"
+        <!-- App header -->
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/Assets/AppGlyph.png" Width="52" Height="52"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
+            <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                <TextBlock x:Name="HeaderTitle" Text="SnipFrame"
+                           FontSize="20" FontWeight="Bold"
                            Foreground="{StaticResource TextBrush}" />
                 <TextBlock x:Name="HeaderSubtitle" Text="Capture, mark up, share."
-                           Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                           FontSize="12" Margin="0,3,0,0"
+                           Foreground="{StaticResource MutedBrush}" />
             </StackPanel>
         </StackPanel>
 
-        <!-- Primary action -->
-        <Button x:Name="NewSnipButton" Grid.Row="1" Style="{StaticResource PrimaryButton}"
-                Click="OnNewSnipClick" Margin="0,0,0,12">
-            <DockPanel LastChildFill="True">
-                <TextBlock x:Name="NewSnipHotkey" DockPanel.Dock="Right" Text="Ctrl+Shift+X"
-                           Foreground="#61616A" FontWeight="Normal" FontSize="11.5"
-                           VerticalAlignment="Center" />
-                <TextBlock x:Name="NewSnipLabel" Text="New Snip" />
-            </DockPanel>
+        <!-- Hero action -->
+        <Button x:Name="NewSnipButton" Style="{StaticResource PrimaryButton}"
+                Height="48" Margin="0,20,0,0"
+                HorizontalContentAlignment="Stretch"
+                Click="OnNewSnipClick">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Path Grid.Column="0"
+                      Data="{StaticResource Icon.Region}"
+                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                      StrokeThickness="1.6"
+                      StrokeStartLineCap="Round"
+                      StrokeEndLineCap="Round"
+                      StrokeLineJoin="Round"
+                      Width="17" Height="17" Stretch="Uniform"
+                      VerticalAlignment="Center" />
+                <TextBlock x:Name="NewSnipLabel" Grid.Column="1" Text="New Snip"
+                           FontSize="14" FontWeight="SemiBold"
+                           Margin="9,0,0,0" VerticalAlignment="Center" />
+                <Border Grid.Column="2" Height="21" CornerRadius="6.5"
+                        Background="#29000000" Padding="8,0"
+                        VerticalAlignment="Center">
+                    <TextBlock x:Name="NewSnipHotkey" Text="Ctrl+Shift+X"
+                               FontFamily="{StaticResource MonoFont}"
+                               FontSize="11" VerticalAlignment="Center" />
+                </Border>
+            </Grid>
         </Button>
 
-        <!-- Capture cards -->
-        <Grid Grid.Row="2" Margin="0,0,0,14">
+        <!-- Secondary capture tiles -->
+        <Grid Margin="0,14,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border x:Name="WindowCard" Grid.Column="0" Style="{StaticResource Card}" Cursor="Hand"
-                    MouseLeftButtonUp="OnWindowCardClick">
-                <StackPanel>
-                    <TextBlock Text="▭" FontSize="19" Foreground="{StaticResource TextBrush}"
-                               HorizontalAlignment="Center" />
-                    <TextBlock x:Name="WindowCardTitle" Text="Window" FontSize="12.5" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextBrush}" HorizontalAlignment="Center" Margin="0,6,0,0" />
-                    <TextBlock x:Name="WindowCardHint" Text="Click a window" Style="{StaticResource Caption}"
-                               HorizontalAlignment="Center" Margin="0,2,0,0" />
+            <Button x:Name="WindowCard" Grid.Column="0" Style="{StaticResource TileButton}"
+                    Click="OnWindowCardClick">
+                <StackPanel VerticalAlignment="Center">
+                    <Path Data="{StaticResource Icon.Window}"
+                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                          StrokeThickness="1.4"
+                          StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round"
+                          Width="22" Height="22" Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock x:Name="WindowCardTitle" Text="Window"
+                               FontSize="13" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Margin="0,7,0,0" />
+                    <TextBlock x:Name="WindowCardHint" Text="Capture a single window"
+                               FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"
+                               Foreground="{StaticResource MutedBrush}" />
                 </StackPanel>
-            </Border>
+            </Button>
 
-            <Border x:Name="FullCard" Grid.Column="2" Style="{StaticResource Card}" Cursor="Hand"
-                    MouseLeftButtonUp="OnFullCardClick">
-                <StackPanel>
-                    <TextBlock Text="🖥" FontSize="17" Foreground="{StaticResource TextBrush}"
-                               HorizontalAlignment="Center" />
-                    <TextBlock x:Name="FullCardTitle" Text="Full Screen" FontSize="12.5" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextBrush}" HorizontalAlignment="Center" Margin="0,6,0,0" />
-                    <TextBlock x:Name="FullCardHint" Text="Capture the whole display" Style="{StaticResource Caption}"
-                               HorizontalAlignment="Center" Margin="0,2,0,0" />
+            <Button x:Name="FullCard" Grid.Column="2" Style="{StaticResource TileButton}"
+                    Click="OnFullCardClick">
+                <StackPanel VerticalAlignment="Center">
+                    <Path Data="{StaticResource Icon.Display}"
+                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                          StrokeThickness="1.4"
+                          StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round"
+                          Width="22" Height="22" Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock x:Name="FullCardTitle" Text="Full Screen"
+                               FontSize="13" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Margin="0,7,0,0" />
+                    <TextBlock x:Name="FullCardHint" Text="Capture the whole display"
+                               FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"
+                               Foreground="{StaticResource MutedBrush}" />
                 </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Default tool -->
+        <Grid Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="86" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="ToolLabel" Grid.Column="0" Text="Tool"
+                       FontSize="12" VerticalAlignment="Center"
+                       Foreground="{StaticResource MutedBrush}" />
+            <Border Grid.Column="1" HorizontalAlignment="Left"
+                    Background="{StaticResource TrackBrush}"
+                    BorderBrush="{StaticResource StrokeBrush}"
+                    BorderThickness="1" CornerRadius="7" Padding="2">
+                <StackPanel x:Name="ToolPanel" Orientation="Horizontal" />
             </Border>
         </Grid>
 
-        <!-- Tool row -->
-        <Grid Grid.Row="3" Margin="0,0,0,8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="84" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="ToolLabel" Text="Tool" Style="{StaticResource Label}" />
-            <StackPanel x:Name="ToolPanel" Grid.Column="1" Orientation="Horizontal" />
-        </Grid>
+        <Border Height="1" Background="#38383C" Margin="0,18,0,0" />
 
-        <!-- Delay row -->
-        <Grid Grid.Row="4" Margin="0,0,0,8">
+        <!-- Preferences -->
+        <Grid Margin="0,12,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="84" />
+                <ColumnDefinition Width="86" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="DelayLabel" Text="Delay" Style="{StaticResource Label}" />
+            <TextBlock x:Name="DelayLabel" Grid.Column="0" Text="Delay"
+                       FontSize="12" VerticalAlignment="Center"
+                       Foreground="{StaticResource MutedBrush}" />
             <ComboBox x:Name="DelayCombo" Grid.Column="1" Width="132" HorizontalAlignment="Left"
-                      SelectionChanged="OnDelayChanged" />
+                      Style="{StaticResource FlatCombo}" SelectionChanged="OnDelayChanged" />
         </Grid>
 
-        <!-- Shortcut row -->
-        <Grid Grid.Row="5" Margin="0,0,0,8">
+        <Grid Margin="0,8,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="84" />
+                <ColumnDefinition Width="86" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="ShortcutLabel" Text="Shortcut" Style="{StaticResource Label}" />
-            <Border x:Name="ShortcutBox" Grid.Column="1" Width="160" Height="26" CornerRadius="6"
-                    Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource StrokeBrush}"
-                    BorderThickness="1" Cursor="Hand" MouseLeftButtonUp="OnShortcutClick">
-                <TextBlock x:Name="ShortcutText" Text="Ctrl+Shift+X" FontSize="12"
-                           Foreground="{StaticResource TextBrush}"
-                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock x:Name="ShortcutLabel" Grid.Column="0" Text="Shortcut"
+                       FontSize="12" VerticalAlignment="Center"
+                       Foreground="{StaticResource MutedBrush}" />
+            <Border x:Name="ShortcutBox" Grid.Column="1" Width="132" Height="24"
+                    HorizontalAlignment="Left" CornerRadius="6"
+                    Background="{StaticResource FieldBrush}"
+                    BorderBrush="{StaticResource StrokeBrush}"
+                    BorderThickness="1" Cursor="Hand"
+                    MouseLeftButtonUp="OnShortcutClick">
+                <TextBlock x:Name="ShortcutText" Text="Ctrl+Shift+X"
+                           FontSize="11.5" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Border>
-            <Button x:Name="ResetButton" Grid.Column="2" Content="Reset" Style="{StaticResource SecondaryButton}"
-                    Margin="8,0,0,0" Padding="10,3" Click="OnResetShortcutClick" />
+            <Button x:Name="ResetButton" Grid.Column="2" Content="Reset"
+                    Style="{StaticResource GhostButton}" Margin="6,0,0,0"
+                    Click="OnResetShortcutClick" />
         </Grid>
 
-        <!-- Language row -->
-        <Grid Grid.Row="6" Margin="0,0,0,0">
+        <Grid Margin="0,8,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="84" />
+                <ColumnDefinition Width="86" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="LanguageLabel" Text="Language" Style="{StaticResource Label}" />
+            <TextBlock x:Name="LanguageLabel" Grid.Column="0" Text="Language"
+                       FontSize="12" VerticalAlignment="Center"
+                       Foreground="{StaticResource MutedBrush}" />
             <ComboBox x:Name="LanguageCombo" Grid.Column="1" Width="160" HorizontalAlignment="Left"
-                      SelectionChanged="OnLanguageChanged" />
+                      Style="{StaticResource FlatCombo}" SelectionChanged="OnLanguageChanged" />
         </Grid>
-    </Grid>
+
+    </StackPanel>
 </Window>
