@@ -5,6 +5,7 @@
 "action.fullScreen" = "Plein écran";
 "action.fullScreen.caption" = "Tout l’écran";
 
+"label.tool" = "Outil";
 "label.delay" = "Délai";
 "delay.none" = "Aucun";
 "delay.3" = "3 secondes";

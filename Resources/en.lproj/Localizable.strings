@@ -5,6 +5,7 @@
 "action.fullScreen" = "Full Screen";
 "action.fullScreen.caption" = "Capture the whole display";
 
+"label.tool" = "Tool";
 "label.delay" = "Delay";
 "delay.none" = "None";
 "delay.3" = "3 seconds";

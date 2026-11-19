@@ -11,6 +11,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var regionMenuItem: NSMenuItem?
     private var delay: TimeInterval = UserDefaults.standard.double(forKey: "captureDelay")
     private var shortcut = ShortcutStore.current
+    private var defaultTool = EditorTool(rawValue: UserDefaults.standard.integer(forKey: "editorTool")) ?? .pen
 
     // MARK: - Lifecycle
 
@@ -42,7 +43,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         controller.onDelayChange = { [weak self] seconds in self?.applyDelay(seconds) }
         controller.onShortcutChange = { [weak self] shortcut in self?.applyShortcut(shortcut) }
         controller.onShortcutReset = { [weak self] in self?.applyShortcut(.default) }
+        controller.onToolChange = { [weak self] tool in self?.applyTool(tool) }
         controller.setDelay(delay)
+        controller.setTool(defaultTool)
         controller.setShortcutText(shortcut.displayString)
         mainWindow = controller
     }
@@ -294,8 +297,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay + 0.2, execute: work)
     }
 
+    private func applyTool(_ tool: EditorTool) {
+        defaultTool = tool
+        UserDefaults.standard.set(tool.rawValue, forKey: "editorTool")
+    }
+
     private func openEditor(with image: NSImage) {
-        guard let controller = EditorWindowController(image: image) else { return }
+        guard let controller = EditorWindowController(image: image, tool: defaultTool) else { return }
         controller.onClose = { [weak self] in self?.editor = nil }
         editor = controller
         controller.showWindow(nil)

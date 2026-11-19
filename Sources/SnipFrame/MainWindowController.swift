@@ -9,15 +9,17 @@ final class MainWindowController: NSWindowController {
     var onDelayChange: ((Double) -> Void)?
     var onShortcutChange: ((Shortcut) -> Void)?
     var onShortcutReset: (() -> Void)?
+    var onToolChange: ((EditorTool) -> Void)?
 
     private let delayValues: [Double] = [0, 3, 5]
     private let delayPopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let shortcutRecorder = ShortcutRecorderButton(frame: .zero)
     private let primary = PrimaryActionButton(frame: .zero)
+    private var toolControl: NSSegmentedControl!
 
     init() {
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 486, height: 384),
+            contentRect: NSRect(x: 0, y: 0, width: 486, height: 418),
             styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
@@ -99,7 +101,38 @@ final class MainWindowController: NSWindowController {
         tiles.heightAnchor.constraint(equalToConstant: 92).isActive = true
 
         // Ayarlar: gecikme + kısayol
+        // Ayarlar sütunu hizası
         let labelWidth: CGFloat = 86
+
+        // Araç seçimi: editörün başlangıç aracı
+        let toolImages = EditorTool.allCases.map { tool in
+            NSImage(systemSymbolName: tool.symbolName, accessibilityDescription: tool.title)
+                ?? NSImage(size: NSSize(width: 16, height: 16))
+        }
+        toolControl = NSSegmentedControl(
+            images: toolImages,
+            trackingMode: .selectOne,
+            target: self,
+            action: #selector(toolChanged)
+        )
+        toolControl.segmentStyle = .texturedRounded
+        toolControl.selectedSegment = 0
+        for (index, tool) in EditorTool.allCases.enumerated() {
+            toolControl.setToolTip(tool.title, forSegment: index)
+        }
+
+        let toolLabel = makeLabel(L("label.tool", "Tool"))
+        toolLabel.translatesAutoresizingMaskIntoConstraints = false
+        toolLabel.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
+
+        let toolSpacer = NSView()
+        toolSpacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        toolSpacer.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        let toolRow = NSStackView(views: [toolLabel, toolControl, toolSpacer])
+        toolRow.orientation = .horizontal
+        toolRow.alignment = .centerY
+        toolRow.spacing = 8
 
         let delayLabel = makeLabel(L("label.delay", "Delay"))
         delayLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -143,7 +176,7 @@ final class MainWindowController: NSWindowController {
             string: L("shortcut.reset", "Reset"),
             attributes: [
                 .font: NSFont.systemFont(ofSize: 11, weight: .medium),
-                .foregroundColor: NSColor.controlAccentColor
+                .foregroundColor: Brand.tint.withAlphaComponent(0.85)
             ]
         )
 
@@ -166,12 +199,13 @@ final class MainWindowController: NSWindowController {
         separator.translatesAutoresizingMaskIntoConstraints = false
         separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
 
-        let stack = NSStackView(views: [header, primary, tiles, separator, footer])
+        let stack = NSStackView(views: [header, primary, tiles, toolRow, separator, footer])
         stack.orientation = .vertical
         stack.alignment = .leading
         stack.spacing = 16
         stack.setCustomSpacing(20, after: header)
-        stack.setCustomSpacing(18, after: tiles)
+        stack.setCustomSpacing(14, after: tiles)
+        stack.setCustomSpacing(18, after: toolRow)
         stack.setCustomSpacing(12, after: separator)
         stack.translatesAutoresizingMaskIntoConstraints = false
         content.addSubview(stack)
@@ -184,6 +218,7 @@ final class MainWindowController: NSWindowController {
             tiles.widthAnchor.constraint(equalTo: stack.widthAnchor),
             separator.widthAnchor.constraint(equalTo: stack.widthAnchor),
             footer.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            toolRow.widthAnchor.constraint(equalTo: stack.widthAnchor),
             delayRow.widthAnchor.constraint(equalTo: footer.widthAnchor),
             shortcutRow.widthAnchor.constraint(equalTo: footer.widthAnchor)
         ])
@@ -206,6 +241,11 @@ final class MainWindowController: NSWindowController {
         onShortcutReset?()
     }
 
+    @objc private func toolChanged() {
+        let tool = EditorTool(rawValue: toolControl.selectedSegment) ?? .pen
+        onToolChange?(tool)
+    }
+
     @objc private func delayChanged() {
         let index = delayPopup.indexOfSelectedItem
         guard delayValues.indices.contains(index) else { return }
@@ -216,6 +256,10 @@ final class MainWindowController: NSWindowController {
         if let index = delayValues.firstIndex(of: seconds) {
             delayPopup.selectItem(at: index)
         }
+    }
+
+    func setTool(_ tool: EditorTool) {
+        toolControl.selectedSegment = tool.rawValue
     }
 
     func setShortcutText(_ text: String) {

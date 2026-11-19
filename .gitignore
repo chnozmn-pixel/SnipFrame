@@ -3,7 +3,7 @@ build/
 .swiftpm/
 .DS_Store
 *.xcodeproj
-design-preview.png
+design-*.png
 menu-bar*.png
 icon-*.png
 .cloud-attachments/

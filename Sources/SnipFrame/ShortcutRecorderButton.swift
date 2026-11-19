@@ -92,7 +92,7 @@ final class ShortcutRecorderButton: NSButton {
         let path = NSBezierPath(roundedRect: rect, xRadius: 6, yRadius: 6)
 
         if isRecording {
-            NSColor.controlAccentColor.withAlphaComponent(0.12).setFill()
+            Brand.tint.withAlphaComponent(0.12).setFill()
         } else if isHovering {
             NSColor.labelColor.withAlphaComponent(0.09).setFill()
         } else {
@@ -101,7 +101,7 @@ final class ShortcutRecorderButton: NSButton {
         path.fill()
 
         let strokeColor = isRecording
-            ? NSColor.controlAccentColor.withAlphaComponent(0.8)
+            ? Brand.tint.withAlphaComponent(0.8)
             : NSColor.separatorColor
         strokeColor.setStroke()
         path.lineWidth = 1
@@ -112,7 +112,7 @@ final class ShortcutRecorderButton: NSButton {
             : displayText
         let attributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.monospacedSystemFont(ofSize: 12, weight: .medium),
-            .foregroundColor: isRecording ? NSColor.controlAccentColor : NSColor.labelColor
+            .foregroundColor: isRecording ? Brand.tint : NSColor.labelColor
         ]
         let size = (text as NSString).size(withAttributes: attributes)
         (text as NSString).draw(

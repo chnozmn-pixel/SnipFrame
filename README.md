@@ -18,6 +18,8 @@ Harici bağımlılık yok; sadece Apple çatısı (AppKit, CoreGraphics, Carbon)
 | Çoklu ekran | Seçim, imlecin bulunduğu ekranda yapılır; Retina'da native piksel kalitesi |
 | Anotasyon | Kalem, fosforlu kalem, ok, dikdörtgen, elips, mozaik (gizleme), metin |
 | Renk & kalınlık | Renk seçici + çizgi kalınlığı kaydırıcısı |
+| Araç seçimi | Ana pencereden varsayılan anotasyon aracı seçilir; editör o araçla açılır |
+| Tema | Logoya uygun nötr grafit/gümüş palet; açık ve koyu görünüme uyarlanır |
 | Geri al / yinele | ⌘Z / ⌘⇧Z |
 | Çıktı | ⌘C ile panoya kopyala, ⌘S ile PNG kaydet (varsayılan: Masaüstü) |
 | Ana pencere | Dock simgesine tıklayınca açılır; gradyan "Yeni Yakalama" düğmesi, Pencere / Tam Ekran kartları, gecikme seçimi |

@@ -5,6 +5,7 @@
 "action.fullScreen" = "Ganzer Bildschirm";
 "action.fullScreen.caption" = "Den ganzen Bildschirm";
 
+"label.tool" = "Werkzeug";
 "label.delay" = "Verzögerung";
 "delay.none" = "Keine";
 "delay.3" = "3 Sekunden";

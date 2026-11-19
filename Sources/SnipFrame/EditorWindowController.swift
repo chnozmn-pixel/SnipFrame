@@ -11,9 +11,19 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
 
     var onClose: (() -> Void)?
 
-    init?(image: NSImage) {
+    /// Logoya uygun varsayılan çizim rengi (sabit: dışa aktarımda da aynı kalsın).
+    static let defaultStrokeColor = NSColor(srgbRed: 0.11, green: 0.11, blue: 0.13, alpha: 1)
+
+    private let initialTool: EditorTool
+    private let initialColor: NSColor
+
+    init?(image: NSImage,
+          tool: EditorTool = .pen,
+          strokeColor: NSColor = EditorWindowController.defaultStrokeColor) {
         guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
 
+        initialTool = tool
+        initialColor = strokeColor
         canvas = EditorCanvasView(baseImage: image, baseCGImage: cgImage)
 
         let visible = NSScreen.main?.visibleFrame.size ?? NSSize(width: 1200, height: 800)
@@ -35,6 +45,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
 
         window.delegate = self
         canvas.delegate = self
+        canvas.tool = tool
+        canvas.strokeColor = strokeColor
         buildContent()
     }
 
@@ -57,14 +69,14 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
                 ?? NSImage(size: NSSize(width: 16, height: 16))
         }
         toolControl = NSSegmentedControl(images: images, trackingMode: .selectOne, target: self, action: #selector(toolChanged(_:)))
-        toolControl.selectedSegment = 0
+        toolControl.selectedSegment = initialTool.rawValue
         toolControl.segmentStyle = .texturedRounded
         for (index, tool) in EditorTool.allCases.enumerated() {
             toolControl.setToolTip(tool.title, forSegment: index)
         }
 
         colorWell = NSColorWell()
-        colorWell.color = .systemRed
+        colorWell.color = initialColor
         colorWell.target = self
         colorWell.action = #selector(colorChanged(_:))
         colorWell.translatesAutoresizingMaskIntoConstraints = false

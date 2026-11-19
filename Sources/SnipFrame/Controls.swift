@@ -1,10 +1,34 @@
 import AppKit
 
-/// Marka renkleri ve ortak çizim yardımcıları.
+/// Marka renkleri: logodaki grafit/gümüş palet, açık-koyu görünüme uyarlanır.
 enum Brand {
-    static let start = NSColor(srgbRed: 0.36, green: 0.45, blue: 1.00, alpha: 1)
-    static let end = NSColor(srgbRed: 0.62, green: 0.36, blue: 0.98, alpha: 1)
-    static let gradient = NSGradient(starting: start, ending: end) ?? NSGradient(colors: [start])!
+
+    static func dynamic(light: NSColor, dark: NSColor) -> NSColor {
+        NSColor(name: nil) { appearance in
+            appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua ? dark : light
+        }
+    }
+
+    /// Birincil düğmenin üst tonu: açık görünümde grafit, koyuda gümüş.
+    static let fill = dynamic(
+        light: NSColor(srgbRed: 0.23, green: 0.23, blue: 0.25, alpha: 1),
+        dark: NSColor(srgbRed: 0.90, green: 0.90, blue: 0.92, alpha: 1)
+    )
+    static let fillEnd = dynamic(
+        light: NSColor(srgbRed: 0.11, green: 0.11, blue: 0.13, alpha: 1),
+        dark: NSColor(srgbRed: 0.72, green: 0.72, blue: 0.76, alpha: 1)
+    )
+    /// Dolgu üzerindeki yazı/simge rengi.
+    static let onFill = dynamic(
+        light: .white,
+        dark: NSColor(srgbRed: 0.07, green: 0.07, blue: 0.09, alpha: 1)
+    )
+    /// Vurgu tonu (hover, seçim, kayıt durumu).
+    static let tint = dynamic(light: NSColor.black, dark: NSColor.white)
+
+    static var gradient: NSGradient {
+        NSGradient(starting: fill, ending: fillEnd) ?? NSGradient(colors: [fill])!
+    }
 }
 
 extension NSImage {
@@ -118,8 +142,8 @@ final class PrimaryActionButton: NSButton {
         let rect = bounds.insetBy(dx: 0.5, dy: 0.5)
         let path = NSBezierPath(roundedRect: rect, xRadius: 12, yRadius: 12)
 
-        let top = Brand.start.blended(withFraction: isHovering ? 0.26 : 0.16, of: .white) ?? Brand.start
-        let bottom = Brand.end.blended(withFraction: 0.06, of: .black) ?? Brand.end
+        let top = Brand.fill.blended(withFraction: isHovering ? 0.16 : 0.06, of: .white) ?? Brand.fill
+        let bottom = Brand.fillEnd
         NSGradient(starting: top, ending: bottom)?.draw(in: path, angle: -90)
 
         if isPressed {
@@ -132,7 +156,7 @@ final class PrimaryActionButton: NSButton {
            let configured = symbol.withSymbolConfiguration(
             NSImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
            ) {
-            let image = configured.tinted(.white)
+            let image = configured.tinted(Brand.onFill)
             let size = image.size
             image.draw(in: NSRect(x: x, y: rect.midY - size.height / 2, width: size.width, height: size.height))
             x += size.width + 9
@@ -140,7 +164,7 @@ final class PrimaryActionButton: NSButton {
 
         let titleAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 14, weight: .semibold),
-            .foregroundColor: NSColor.white
+            .foregroundColor: Brand.onFill
         ]
         let titleSize = (title as NSString).size(withAttributes: titleAttributes)
         (title as NSString).draw(
@@ -151,7 +175,7 @@ final class PrimaryActionButton: NSButton {
         guard !hintText.isEmpty else { return }
         let hintAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
-            .foregroundColor: NSColor.white.withAlphaComponent(0.92)
+            .foregroundColor: Brand.onFill.withAlphaComponent(0.9)
         ]
         let hintSize = (hintText as NSString).size(withAttributes: hintAttributes)
         let pill = NSRect(
@@ -160,7 +184,7 @@ final class PrimaryActionButton: NSButton {
             width: hintSize.width + 16,
             height: 21
         )
-        NSColor.white.withAlphaComponent(0.18).setFill()
+        Brand.onFill.withAlphaComponent(0.16).setFill()
         NSBezierPath(roundedRect: pill, xRadius: 6.5, yRadius: 6.5).fill()
         (hintText as NSString).draw(
             at: NSPoint(x: pill.midX - hintSize.width / 2, y: pill.midY - hintSize.height / 2),
@@ -216,16 +240,16 @@ final class CaptureTile: NSButton {
         let path = NSBezierPath(roundedRect: rect, xRadius: 11, yRadius: 11)
 
         if isPressed {
-            Brand.start.withAlphaComponent(0.22).setFill()
+            Brand.tint.withAlphaComponent(0.16).setFill()
         } else if isHovering {
-            Brand.start.withAlphaComponent(0.12).setFill()
+            Brand.tint.withAlphaComponent(0.08).setFill()
         } else {
-            NSColor.labelColor.withAlphaComponent(0.09).setFill()
+            NSColor.labelColor.withAlphaComponent(0.06).setFill()
         }
         path.fill()
 
         let stroke = isHovering
-            ? Brand.start.withAlphaComponent(0.55)
+            ? Brand.tint.withAlphaComponent(0.45)
             : NSColor.separatorColor.withAlphaComponent(0.65)
         stroke.setStroke()
         path.lineWidth = 1
@@ -243,7 +267,7 @@ final class CaptureTile: NSButton {
            let configured = symbol.withSymbolConfiguration(
             NSImage.SymbolConfiguration(pointSize: iconHeight, weight: .regular)
            ) {
-            let image = configured.tinted(isHovering ? Brand.start : .secondaryLabelColor)
+            let image = configured.tinted(isHovering ? Brand.tint : .secondaryLabelColor)
             let size = image.size
             let scale = min(1, iconHeight / max(size.height, 1))
             let drawSize = NSSize(width: size.width * scale, height: size.height * scale)

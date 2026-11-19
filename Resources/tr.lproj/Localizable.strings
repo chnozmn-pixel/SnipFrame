@@ -5,6 +5,7 @@
 "action.fullScreen" = "Tam Ekran";
 "action.fullScreen.caption" = "Ekranın tamamını al";
 
+"label.tool" = "Araç";
 "label.delay" = "Gecikme";
 "delay.none" = "Yok";
 "delay.3" = "3 saniye";
