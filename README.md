@@ -52,6 +52,28 @@ open build/SnipFrame.app        # launches the app
 > You can move the app into `/Applications`. When the ad-hoc signature changes after a rebuild,
 > macOS may ask for Screen Recording permission again; that is expected.
 
+### First launch is blocked by Gatekeeper
+
+SnipFrame is signed ad-hoc (no paid Apple Developer ID), so a downloaded copy triggers
+“cannot be opened because it is from an unidentified developer”. The app is not damaged; clear
+the quarantine flag once and it opens normally afterwards:
+
+```bash
+# option 1 — Finder: right-click SnipFrame.app → Open → Open
+# option 2 — Terminal (after moving the app to /Applications):
+xattr -dr com.apple.quarantine /Applications/SnipFrame.app
+open /Applications/SnipFrame.app
+```
+
+On macOS 15 and later, if right-click → Open is not offered, use
+**System Settings → Privacy & Security → Open Anyway** right after the blocked attempt.
+
+> Downloading with `curl` instead of a browser skips the quarantine flag entirely:
+> `curl -L -o SnipFrame.zip https://github.com/chnozmn-pixel/SnipFrame/releases/latest/download/SnipFrame-1.0.0-macOS.zip`
+
+To remove the warning for everyone, the app has to be signed with a Developer ID certificate and
+notarized by Apple.
+
 ### Screen Recording permission
 
 The first capture triggers a macOS permission prompt. If you deny it or miss it:
