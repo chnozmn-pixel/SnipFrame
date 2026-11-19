@@ -26,6 +26,7 @@
 "menu.about" = "Acerca de SnipFrame";
 "menu.quit" = "Salir";
 "menu.hide" = "Ocultar SnipFrame";
+"menu.windowMenu" = "Ventana";
 "menu.edit" = "Edición";
 "menu.undo" = "Deshacer";
 "menu.redo" = "Rehacer";

@@ -26,6 +26,7 @@
 "menu.about" = "SnipFrame Hakkında";
 "menu.quit" = "Çıkış";
 "menu.hide" = "SnipFrame'i Gizle";
+"menu.windowMenu" = "Pencere";
 "menu.edit" = "Düzen";
 "menu.undo" = "Geri Al";
 "menu.redo" = "Yinele";

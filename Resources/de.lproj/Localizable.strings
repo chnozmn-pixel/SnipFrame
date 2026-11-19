@@ -26,6 +26,7 @@
 "menu.about" = "Über SnipFrame";
 "menu.quit" = "Beenden";
 "menu.hide" = "SnipFrame ausblenden";
+"menu.windowMenu" = "Fenster";
 "menu.edit" = "Bearbeiten";
 "menu.undo" = "Widerrufen";
 "menu.redo" = "Wiederholen";

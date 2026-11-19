@@ -220,7 +220,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         mainMenu.addItem(editMenuItem)
 
         let windowMenuItem = NSMenuItem()
-        let windowMenu = NSMenu(title: L("menu.window", "Window"))
+        let windowMenu = NSMenu(title: L("menu.windowMenu", "Window"))
         windowMenu.addItem(withTitle: L("menu.minimize", "Minimize"), action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
         windowMenu.addItem(withTitle: L("menu.close", "Close"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
         windowMenuItem.submenu = windowMenu
