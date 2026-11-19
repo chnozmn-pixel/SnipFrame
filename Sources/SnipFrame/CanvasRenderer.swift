@@ -1,7 +1,7 @@
 import AppKit
 
 enum EditorTool: Int, CaseIterable {
-    case pen, highlighter, arrow, rectangle, ellipse, pixelate, text
+    case pen, highlighter, arrow, rectangle, ellipse, pixelate, text, eraser
 
     var title: String {
         switch self {
@@ -12,6 +12,7 @@ enum EditorTool: Int, CaseIterable {
         case .ellipse: return L("tool.ellipse", "Ellipse")
         case .pixelate: return L("tool.pixelate", "Mosaic")
         case .text: return L("tool.text", "Text")
+        case .eraser: return L("tool.eraser", "Eraser")
         }
     }
 
@@ -24,6 +25,7 @@ enum EditorTool: Int, CaseIterable {
         case .ellipse: return "oval"
         case .pixelate: return "squareshape.split.3x3"
         case .text: return "textformat"
+        case .eraser: return "eraser"
         }
     }
 }
@@ -122,6 +124,10 @@ struct CanvasRenderer {
                 path.lineWidth = annotation.lineWidth
                 path.stroke()
             }
+
+        case .eraser:
+            // Silgi kalıcı bir işaret bırakmaz; yalnızca tuvaldeki öğeleri kaldırır.
+            return
 
         case .text:
             guard let text = annotation.text, !text.isEmpty else { return }

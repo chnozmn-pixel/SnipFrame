@@ -17,6 +17,7 @@ Harici bağımlılık yok; sadece Apple çatısı (AppKit, CoreGraphics, Carbon)
 | Gecikme | 0 / 3 / 5 saniye (menü öğesinden) |
 | Çoklu ekran | Seçim, imlecin bulunduğu ekranda yapılır; Retina'da native piksel kalitesi |
 | Anotasyon | Kalem, fosforlu kalem, ok, dikdörtgen, elips, mozaik (gizleme), metin |
+| Silgi | Çizgileri temas noktasından böler; şekil, metin ve mozaiği kaldırır (tek adım geri alınır) |
 | Renk & kalınlık | Renk seçici + çizgi kalınlığı kaydırıcısı |
 | Araç seçimi | Ana pencereden varsayılan anotasyon aracı seçilir; editör o araçla açılır |
 | Tema | Logoya uygun nötr grafit/gümüş palet; açık ve koyu görünüme uyarlanır |

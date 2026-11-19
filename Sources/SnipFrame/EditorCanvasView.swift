@@ -22,7 +22,11 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
     var lineWidth: CGFloat = 3
 
     private(set) var annotations: [Annotation] = []
-    private var redoStack: [Annotation] = []
+    private var undoStack: [[Annotation]] = []
+    private var redoStack: [[Annotation]] = []
+    private var erasing = false
+    private var eraseSnapshot: [Annotation] = []
+    private var didErase = false
     private var current: Annotation?
     private var dragStart: CGPoint = .zero
     private var activeTextField: NSTextField?
@@ -65,12 +69,27 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
             return
         }
 
+        if tool == .eraser {
+            erasing = true
+            didErase = false
+            eraseSnapshot = annotations
+            erase(at: point)
+            needsDisplay = true
+            return
+        }
+
         dragStart = point
         current = Annotation(tool: tool, points: [point, point], color: strokeColor, lineWidth: lineWidth)
         needsDisplay = true
     }
 
     override func mouseDragged(with event: NSEvent) {
+        if erasing {
+            erase(at: convert(event.locationInWindow, from: nil))
+            needsDisplay = true
+            return
+        }
+
         guard var annotation = current else { return }
         let point = convert(event.locationInWindow, from: nil)
 
@@ -84,6 +103,19 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
     }
 
     override func mouseUp(with event: NSEvent) {
+        if erasing {
+            erasing = false
+            if didErase {
+                undoStack.append(eraseSnapshot)
+                redoStack.removeAll()
+                delegate?.canvasDidEdit(self)
+            }
+            eraseSnapshot = []
+            didErase = false
+            needsDisplay = true
+            return
+        }
+
         guard let annotation = current else { return }
         current = nil
 
@@ -97,6 +129,7 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
     }
 
     private func commit(_ annotation: Annotation) {
+        undoStack.append(annotations)
         annotations.append(annotation)
         redoStack.removeAll()
         delegate?.canvasDidEdit(self)
@@ -104,17 +137,132 @@ final class EditorCanvasView: NSView, NSTextFieldDelegate {
     }
 
     @objc func undo() {
-        guard let last = annotations.popLast() else { return }
-        redoStack.append(last)
+        guard let previous = undoStack.popLast() else { return }
+        redoStack.append(annotations)
+        annotations = previous
         delegate?.canvasDidEdit(self)
         needsDisplay = true
     }
 
     @objc func redo() {
-        guard let annotation = redoStack.popLast() else { return }
-        annotations.append(annotation)
+        guard let next = redoStack.popLast() else { return }
+        undoStack.append(annotations)
+        annotations = next
         delegate?.canvasDidEdit(self)
         needsDisplay = true
+    }
+
+    // MARK: - Eraser
+
+    /// Silgi: çizgileri temas noktasından böler, kapalı şekilleri/metni tümüyle kaldırır.
+    private func erase(at point: CGPoint) {
+        var result: [Annotation] = []
+        var changed = false
+
+        for annotation in annotations {
+            let isHighlighter = annotation.tool == .highlighter
+            let radius = max(7, annotation.lineWidth * (isHighlighter ? 4.5 : 1.8))
+
+            switch annotation.tool {
+            case .pen, .highlighter:
+                let runs = remainingRuns(in: annotation, around: point, radius: radius)
+                if runs.count == 1, runs[0].count == annotation.points.count {
+                    result.append(annotation)
+                } else {
+                    changed = true
+                    for run in runs {
+                        var piece = annotation
+                        piece.points = run
+                        result.append(piece)
+                    }
+                }
+            case .eraser:
+                result.append(annotation)
+            default:
+                if hit(annotation, at: point, radius: radius) {
+                    changed = true
+                } else {
+                    result.append(annotation)
+                }
+            }
+        }
+
+        if changed {
+            annotations = result
+            didErase = true
+        }
+    }
+
+    private func remainingRuns(in annotation: Annotation, around center: CGPoint, radius: CGFloat) -> [[CGPoint]] {
+        var runs: [[CGPoint]] = []
+        var run: [CGPoint] = []
+        for point in annotation.points {
+            if hypot(point.x - center.x, point.y - center.y) <= radius {
+                if run.count > 1 { runs.append(run) }
+                run = []
+            } else {
+                run.append(point)
+            }
+        }
+        if run.count > 1 { runs.append(run) }
+        return runs
+    }
+
+    private func hit(_ annotation: Annotation, at point: CGPoint, radius: CGFloat) -> Bool {
+        let pad = radius + annotation.lineWidth
+        switch annotation.tool {
+        case .arrow:
+            guard annotation.points.count > 1 else { return false }
+            return distance(from: point, toSegment: annotation.points[0], annotation.points[1]) <= pad
+        case .rectangle:
+            guard annotation.points.count > 1 else { return false }
+            let rect = rect(from: annotation.points[0], to: annotation.points[1])
+            let corners = [
+                CGPoint(x: rect.minX, y: rect.minY), CGPoint(x: rect.maxX, y: rect.minY),
+                CGPoint(x: rect.maxX, y: rect.maxY), CGPoint(x: rect.minX, y: rect.maxY)
+            ]
+            for index in 0..<4 {
+                if distance(from: point, toSegment: corners[index], corners[(index + 1) % 4]) <= pad { return true }
+            }
+            return false
+        case .ellipse:
+            guard annotation.points.count > 1 else { return false }
+            let rect = rect(from: annotation.points[0], to: annotation.points[1])
+            let center = CGPoint(x: rect.midX, y: rect.midY)
+            let radiusX = rect.width / 2, radiusY = rect.height / 2
+            guard radiusX > 0.5, radiusY > 0.5 else { return false }
+            for step in 0..<96 {
+                let angle = CGFloat(step) / 96 * 2 * .pi
+                let sample = CGPoint(x: center.x + radiusX * cos(angle), y: center.y + radiusY * sin(angle))
+                if hypot(sample.x - point.x, sample.y - point.y) <= pad { return true }
+            }
+            return false
+        case .pixelate:
+            guard annotation.points.count > 1 else { return false }
+            return rect(from: annotation.points[0], to: annotation.points[1]).insetBy(dx: -2, dy: -2).contains(point)
+        case .text:
+            guard let text = annotation.text, !text.isEmpty else { return false }
+            let font = NSFont.systemFont(ofSize: max(10, annotation.lineWidth), weight: .semibold)
+            let size = (text as NSString).size(withAttributes: [.font: font])
+            let origin = annotation.points[0]
+            return NSRect(x: origin.x, y: origin.y, width: size.width, height: size.height)
+                .insetBy(dx: -4, dy: -4)
+                .contains(point)
+        case .pen, .highlighter, .eraser:
+            return false
+        }
+    }
+
+    private func rect(from a: CGPoint, to b: CGPoint) -> NSRect {
+        NSRect(x: min(a.x, b.x), y: min(a.y, b.y), width: abs(a.x - b.x), height: abs(a.y - b.y))
+    }
+
+    private func distance(from point: CGPoint, toSegment a: CGPoint, _ b: CGPoint) -> CGFloat {
+        let dx = b.x - a.x, dy = b.y - a.y
+        let lengthSquared = dx * dx + dy * dy
+        guard lengthSquared > 0 else { return hypot(point.x - a.x, point.y - a.y) }
+        let t = max(0, min(1, ((point.x - a.x) * dx + (point.y - a.y) * dy) / lengthSquared))
+        return hypot(point.x - (a.x + t * dx), point.y - (a.y + t * dy))
     }
 
     // MARK: - Text tool

@@ -62,4 +62,5 @@
 "tool.rectangle" = "Rectangle";
 "tool.ellipse" = "Ellipse";
 "tool.pixelate" = "Mosaic";
+"tool.eraser" = "Eraser";
 "tool.text" = "Text";

@@ -62,4 +62,5 @@
 "tool.rectangle" = "Dikdörtgen";
 "tool.ellipse" = "Elips";
 "tool.pixelate" = "Mozaik";
+"tool.eraser" = "Silgi";
 "tool.text" = "Metin";
