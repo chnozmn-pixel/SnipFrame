@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="app.subtitle" xml:space="preserve"><value>Yakala, işaretle, paylaş.</value></data>
+
+  <data name="action.newSnip" xml:space="preserve"><value>Yeni Snip</value></data>
+  <data name="action.region" xml:space="preserve"><value>Bölge</value></data>
+  <data name="action.region.hint" xml:space="preserve"><value>Bir alan seçmek için sürükleyin</value></data>
+  <data name="action.window" xml:space="preserve"><value>Pencere</value></data>
+  <data name="action.window.hint" xml:space="preserve"><value>Bir pencereye tıklayın</value></data>
+  <data name="action.fullScreen" xml:space="preserve"><value>Tam Ekran</value></data>
+  <data name="action.fullScreen.hint" xml:space="preserve"><value>Tüm ekranı yakala</value></data>
+  <data name="action.reset" xml:space="preserve"><value>Sıfırla</value></data>
+
+  <data name="label.tool" xml:space="preserve"><value>Araç</value></data>
+  <data name="label.delay" xml:space="preserve"><value>Gecikme</value></data>
+  <data name="label.shortcut" xml:space="preserve"><value>Kısayol</value></data>
+  <data name="label.language" xml:space="preserve"><value>Dil</value></data>
+  <data name="delay.none" xml:space="preserve"><value>Yok</value></data>
+  <data name="delay.seconds" xml:space="preserve"><value>{0} sn</value></data>
+
+  <data name="tool.pen" xml:space="preserve"><value>Kalem</value></data>
+  <data name="tool.highlighter" xml:space="preserve"><value>Fosforlu</value></data>
+  <data name="tool.arrow" xml:space="preserve"><value>Ok</value></data>
+  <data name="tool.rectangle" xml:space="preserve"><value>Dikdörtgen</value></data>
+  <data name="tool.ellipse" xml:space="preserve"><value>Elips</value></data>
+  <data name="tool.mosaic" xml:space="preserve"><value>Mozaik</value></data>
+  <data name="tool.text" xml:space="preserve"><value>Metin</value></data>
+  <data name="tool.eraser" xml:space="preserve"><value>Silgi</value></data>
+
+  <data name="capture.regionHint" xml:space="preserve"><value>Alan seçmek için sürükleyin  ·  Esc ile iptal</value></data>
+  <data name="capture.windowHint" xml:space="preserve"><value>Yakalamak için bir pencereye tıklayın  ·  Esc ile iptal</value></data>
+  <data name="capture.tooSmall" xml:space="preserve"><value>Seçim çok küçük</value></data>
+  <data name="capture.failed" xml:space="preserve"><value>Ekran yakalanamadı</value></data>
+
+  <data name="editor.title" xml:space="preserve"><value>SnipFrame — Düzenle</value></data>
+  <data name="editor.copy" xml:space="preserve"><value>Kopyala</value></data>
+  <data name="editor.save" xml:space="preserve"><value>Kaydet…</value></data>
+  <data name="editor.undo" xml:space="preserve"><value>Geri al (Ctrl+Z)</value></data>
+  <data name="editor.redo" xml:space="preserve"><value>Yinele (Ctrl+Y)</value></data>
+  <data name="editor.copied" xml:space="preserve"><value>Panoya kopyalandı ✓</value></data>
+  <data name="editor.saved" xml:space="preserve"><value>Kaydedildi ✓</value></data>
+  <data name="editor.lineWidth" xml:space="preserve"><value>Çizgi kalınlığı</value></data>
+  <data name="editor.textPlaceholder" xml:space="preserve"><value>Yazın ve Enter'a basın</value></data>
+  <data name="editor.saveFailed" xml:space="preserve"><value>Görsel kaydedilemedi</value></data>
+  <data name="save.fileName" xml:space="preserve"><value>Ekran görüntüsü {0}.png</value></data>
+  <data name="save.filter" xml:space="preserve"><value>PNG görsel</value></data>
+
+  <data name="tray.open" xml:space="preserve"><value>SnipFrame'i aç</value></data>
+  <data name="tray.region" xml:space="preserve"><value>Bölge yakala</value></data>
+  <data name="tray.window" xml:space="preserve"><value>Pencere yakala</value></data>
+  <data name="tray.fullScreen" xml:space="preserve"><value>Tam ekran yakala</value></data>
+  <data name="tray.delay" xml:space="preserve"><value>Gecikme</value></data>
+  <data name="tray.quit" xml:space="preserve"><value>Çıkış</value></data>
+
+  <data name="language.system" xml:space="preserve"><value>Sistem dili</value></data>
+  <data name="language.en" xml:space="preserve"><value>English</value></data>
+  <data name="language.tr" xml:space="preserve"><value>Türkçe</value></data>
+</root>

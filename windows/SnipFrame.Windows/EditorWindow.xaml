@@ -1,0 +1,69 @@
+<Window x:Class="SnipFrame.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:SnipFrame"
+        Title="SnipFrame — Edit"
+        Height="520" Width="820"
+        MinWidth="640" MinHeight="260"
+        Background="{StaticResource BgBrush}"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="{StaticResource PanelBrush}"
+                BorderBrush="{StaticResource StrokeBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="10,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="UndoButton" Content="↶" Style="{StaticResource SecondaryButton}"
+                            Padding="9,3" Click="OnUndoClick" />
+                    <Button x:Name="RedoButton" Content="↷" Style="{StaticResource SecondaryButton}"
+                            Padding="9,3" Margin="4,0,0,0" Click="OnRedoClick" />
+                    <Border Width="1" Background="{StaticResource StrokeBrush}" Margin="9,3" />
+
+                    <StackPanel x:Name="ToolPanel" Orientation="Horizontal" VerticalAlignment="Center" />
+
+                    <Border x:Name="ColorSwatch" Width="32" Height="24" Margin="9,0,0,0"
+                            CornerRadius="5" BorderThickness="1"
+                            BorderBrush="{StaticResource StrokeBrush}"
+                            Background="#1C1C21" Cursor="Hand"
+                            MouseLeftButtonUp="OnColorClick" />
+
+                    <Slider x:Name="WidthSlider" Width="86" Minimum="1" Maximum="12" Value="3"
+                            Margin="10,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <TextBlock x:Name="StatusText" Grid.Column="1" Style="{StaticResource Caption}"
+                           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="12,0" />
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="SaveButton" Content="Save…" Style="{StaticResource SecondaryButton}"
+                            Click="OnSaveClick" Margin="0,0,6,0" />
+                    <Button x:Name="CopyButton" Content="Copy" Style="{StaticResource PrimaryButton}"
+                            Click="OnCopyClick" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                      Background="#0E0E11">
+            <Grid x:Name="SurfaceHost" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <local:AnnotationCanvas x:Name="Surface" />
+                <Canvas x:Name="Overlay" />
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

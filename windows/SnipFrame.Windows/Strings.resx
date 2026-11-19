@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="app.title" xml:space="preserve"><value>SnipFrame</value></data>
+  <data name="app.subtitle" xml:space="preserve"><value>Capture, mark up, share.</value></data>
+
+  <data name="action.newSnip" xml:space="preserve"><value>New Snip</value></data>
+  <data name="action.region" xml:space="preserve"><value>Region</value></data>
+  <data name="action.region.hint" xml:space="preserve"><value>Drag to select an area</value></data>
+  <data name="action.window" xml:space="preserve"><value>Window</value></data>
+  <data name="action.window.hint" xml:space="preserve"><value>Click a window</value></data>
+  <data name="action.fullScreen" xml:space="preserve"><value>Full Screen</value></data>
+  <data name="action.fullScreen.hint" xml:space="preserve"><value>Capture the whole display</value></data>
+  <data name="action.reset" xml:space="preserve"><value>Reset</value></data>
+
+  <data name="label.tool" xml:space="preserve"><value>Tool</value></data>
+  <data name="label.delay" xml:space="preserve"><value>Delay</value></data>
+  <data name="label.shortcut" xml:space="preserve"><value>Shortcut</value></data>
+  <data name="label.language" xml:space="preserve"><value>Language</value></data>
+  <data name="delay.none" xml:space="preserve"><value>None</value></data>
+  <data name="delay.seconds" xml:space="preserve"><value>{0} s</value></data>
+
+  <data name="tool.pen" xml:space="preserve"><value>Pen</value></data>
+  <data name="tool.highlighter" xml:space="preserve"><value>Highlighter</value></data>
+  <data name="tool.arrow" xml:space="preserve"><value>Arrow</value></data>
+  <data name="tool.rectangle" xml:space="preserve"><value>Rectangle</value></data>
+  <data name="tool.ellipse" xml:space="preserve"><value>Ellipse</value></data>
+  <data name="tool.mosaic" xml:space="preserve"><value>Mosaic</value></data>
+  <data name="tool.text" xml:space="preserve"><value>Text</value></data>
+  <data name="tool.eraser" xml:space="preserve"><value>Eraser</value></data>
+
+  <data name="capture.regionHint" xml:space="preserve"><value>Drag to select an area  ·  Esc to cancel</value></data>
+  <data name="capture.windowHint" xml:space="preserve"><value>Click a window to capture it  ·  Esc to cancel</value></data>
+  <data name="capture.tooSmall" xml:space="preserve"><value>Selection is too small</value></data>
+  <data name="capture.failed" xml:space="preserve"><value>Could not capture the screen</value></data>
+
+  <data name="editor.title" xml:space="preserve"><value>SnipFrame — Edit</value></data>
+  <data name="editor.copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="editor.save" xml:space="preserve"><value>Save…</value></data>
+  <data name="editor.undo" xml:space="preserve"><value>Undo (Ctrl+Z)</value></data>
+  <data name="editor.redo" xml:space="preserve"><value>Redo (Ctrl+Y)</value></data>
+  <data name="editor.copied" xml:space="preserve"><value>Copied to clipboard ✓</value></data>
+  <data name="editor.saved" xml:space="preserve"><value>Saved ✓</value></data>
+  <data name="editor.lineWidth" xml:space="preserve"><value>Line width</value></data>
+  <data name="editor.textPlaceholder" xml:space="preserve"><value>Type and press Enter</value></data>
+  <data name="editor.saveFailed" xml:space="preserve"><value>Could not save the image</value></data>
+  <data name="save.fileName" xml:space="preserve"><value>Screenshot {0}.png</value></data>
+  <data name="save.filter" xml:space="preserve"><value>PNG image</value></data>
+
+  <data name="tray.open" xml:space="preserve"><value>Open SnipFrame</value></data>
+  <data name="tray.region" xml:space="preserve"><value>Capture region</value></data>
+  <data name="tray.window" xml:space="preserve"><value>Capture window</value></data>
+  <data name="tray.fullScreen" xml:space="preserve"><value>Capture full screen</value></data>
+  <data name="tray.delay" xml:space="preserve"><value>Delay</value></data>
+  <data name="tray.quit" xml:space="preserve"><value>Quit</value></data>
+
+  <data name="language.system" xml:space="preserve"><value>System language</value></data>
+  <data name="language.en" xml:space="preserve"><value>English</value></data>
+  <data name="language.tr" xml:space="preserve"><value>Türkçe</value></data>
+</root>

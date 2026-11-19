@@ -114,6 +114,47 @@ relaunch the app.
 - In the editor: pick a tool and draw; `⌘C` copies, `⌘S` saves, `⌘Z` undoes, `Esc` closes.
   With the text tool, click, type and press `Enter` to place the text.
 
+## Windows
+
+A Windows port lives in `windows/` — the same capture → annotate → copy flow, written in C# / WPF
+on .NET 8. It ships as a portable single-file executable (no installer, no .NET runtime needed).
+
+### Install (Windows 10/11)
+
+1. Download `SnipFrame-1.1.0-windows-x64.zip` from
+   [Releases](https://github.com/chnozmn-pixel/SnipFrame/releases/latest) and unzip it anywhere.
+2. Run `SnipFrame.exe`. SmartScreen may warn on the first run because the binary is unsigned —
+   choose **More info → Run anyway**.
+3. Press **Ctrl+Shift+X** from anywhere, or use the tray icon.
+
+### Build
+
+With the .NET 8 SDK installed:
+
+```powershell
+cd windows
+.\build.ps1                              # -> windows/dist/SnipFrame.exe
+dotnet run --project SnipFrame.Windows    # or run straight from source
+```
+
+Cross-building from macOS/Linux works as well (the release artifact was produced that way):
+
+```bash
+dotnet publish windows/SnipFrame.Windows -c Release -r win-x64 --self-contained true \
+  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+  -p:EnableCompressionInSingleFile=true -o windows/dist
+# Turkish UI strings live in a satellite assembly that single-file publish leaves beside the exe
+mkdir -p windows/dist/tr && cp windows/SnipFrame.Windows/bin/Release/net8.0-windows/win-x64/tr/SnipFrame.resources.dll windows/dist/tr/
+```
+
+### Windows feature set
+
+- Region, window and full-screen capture with a 0 / 3 / 5 second delay
+- The same editor: pen, highlighter, arrow, rectangle, ellipse, mosaic, text and eraser, with
+  undo/redo (Ctrl+Z / Ctrl+Y), Ctrl+C to the clipboard and Ctrl+S to save a PNG
+- Tray icon, global hotkey with a recorder in the main window, default tool picker
+- English and Turkish UI (`Strings.resx` + `Strings.tr.resx`), remembered in `%AppData%\SnipFrame\settings.json`
+
 ## Project layout
 
 ```
@@ -139,6 +180,7 @@ Sources/SnipFrame/
   EditorCanvasView.swift            canvas, drawing input, text, undo, export
   CanvasRenderer.swift              annotation model + shared drawing engine
   CanvasContainerView.swift         flipped container for scrolling
+windows/                            Windows port (C# / WPF, .NET 8)
 docs/screenshots/                   README screenshots
 LICENSE                             MIT license
 ```
