@@ -1,102 +1,102 @@
 # SnipFrame
 
-Windows **Snipping Tool**'ün macOS karşılığı: menü çubuğunda yaşayan, global kısayolla bölge/pencere/tam ekran görüntüsü alan ve aldığı görüntüyü üzerine çizim yaparak panoya kopyalayan ya da PNG olarak kaydeden native bir Swift/AppKit uygulaması.
+The macOS answer to Windows **Snipping Tool**: a native Swift/AppKit app that lives in the menu
+bar, captures a region, a window or the whole screen with a global shortcut, and lets you draw on
+the result before copying it to the clipboard or saving it as a PNG.
 
-Depo: <https://github.com/chnozmn-pixel/SnipFrame>
+Repository: <https://github.com/chnozmn-pixel/SnipFrame>
 
+No third-party dependencies; only Apple frameworks (AppKit, CoreGraphics, Carbon).
 
-Harici bağımlılık yok; sadece Apple çatısı (AppKit, CoreGraphics, Carbon) kullanır.
+## Features
 
-## Özellikler
-
-| Özellik | Açıklama |
+| Feature | Description |
 | --- | --- |
-| Bölge yakalama | Ekran karartılır, seçim yaparken büyüteç + piksel boyutu göstergesi çıkar |
-| Pencere yakalama | İmlecin altındaki pencere canlı olarak vurgulanır, tıklayınca kırpılır |
-| Tam ekran | İmlecin bulunduğu ekranı doğrudan yakalar |
-| Gecikme | 0 / 3 / 5 saniye (menü öğesinden) |
-| Çoklu ekran | Seçim, imlecin bulunduğu ekranda yapılır; Retina'da native piksel kalitesi |
-| Anotasyon | Kalem, fosforlu kalem, ok, dikdörtgen, elips, mozaik (gizleme), metin |
-| Silgi | Çizgileri temas noktasından böler; şekil, metin ve mozaiği kaldırır (tek adım geri alınır) |
-| Renk & kalınlık | Renk seçici + çizgi kalınlığı kaydırıcısı |
-| Araç seçimi | Ana pencereden varsayılan anotasyon aracı seçilir; editör o araçla açılır |
-| Tema | Logoya uygun nötr grafit/gümüş palet; açık ve koyu görünüme uyarlanır |
-| Geri al / yinele | Araç çubuğu düğmeleri ve ⌘Z / ⇧⌘Z; metin yazarken yazı alanının kendi geçmişi kullanılır |
-| Çıktı | ⌘C ile panoya kopyala, ⌘S ile PNG kaydet (varsayılan: Masaüstü) |
-| Ana pencere | Dock simgesine tıklayınca açılır; gradyan "Yeni Yakalama" düğmesi, Pencere / Tam Ekran kartları, gecikme seçimi |
-| Uygulama simgesi | `Resources/AppIconSource.png`'den üretilir; `swift scripts/make-icon.swift` → `AppIcon.icns` + `AppGlyph.png` |
-| Arka plan | Menü çubuğunda da yaşamaya devam eder; ana pencere kapansa bile kısayol çalışır |
+| Region capture | The screen dims; a loupe and pixel-size readout follow the selection |
+| Window capture | The window under the cursor is highlighted live and cropped on click |
+| Full screen | Captures the display the cursor is on, immediately |
+| Delay | 0 / 3 / 5 seconds (from the menu) |
+| Multiple displays | Selection happens on the display with the cursor; native pixel quality on Retina |
+| Annotation | Pen, highlighter, arrow, rectangle, ellipse, mosaic (redaction), text |
+| Eraser | Splits strokes where it touches them; removes shapes, text and mosaic blocks (one undo step) |
+| Color & width | Color well plus a line-width slider |
+| Tool picker | Pick the default annotation tool in the main window; the editor opens with it |
+| Theme | Neutral graphite/silver palette that matches the logo and adapts to light and dark mode |
+| Undo / redo | Toolbar buttons and ⌘Z / ⇧⌘Z; while typing, the text field's own history is used |
+| Output | ⌘C copies to the clipboard, ⌘S saves a PNG (Desktop by default) |
+| Main window | Opens from the Dock icon: gradient “New Snip” button, Window / Full Screen cards, delay picker |
+| App icon | Generated from `Resources/AppIconSource.png`; `swift scripts/make-icon.swift` → `AppIcon.icns` + `AppGlyph.png` |
+| Background | Keeps running in the menu bar; the shortcut works even when the main window is closed |
 
-## Dil desteği
+## Languages
 
-Arayüz **sistem dilini** izler. Paketle gelen diller: İngilizce, Türkçe, Almanca, Fransızca,
-İspanyolca (`Resources/<dil>.lproj/Localizable.strings`). Yeni dil eklemek için aynı anahtarlarla
-bir `.lproj` klasörü oluşturup `scripts/build-app.sh` ile yeniden paketleyin.
+The interface follows the **system language**. Bundled languages: English, Turkish, German, French
+and Spanish (`Resources/<language>.lproj/Localizable.strings`). To add a language, create another
+`.lproj` folder with the same keys and repackage with `scripts/build-app.sh`.
 
-## Kısayol
+## Shortcut
 
-Varsayılan **⌘⇧X**'tir. Ana penceredeki **Kısayol** alanına tıklayıp yeni kombinasyonu tuşlayarak
-değiştirebilir, **Sıfırla** ile varsayılana dönebilirsiniz. Seçim `UserDefaults`'ta saklanır
-(`com.local.snipframe`). Kombinasyonda ⌘ / ⌥ / ⌃ bulunmalıdır (fonksiyon tuşları istisna).
+The default is **⌘⇧X**. Click the **Shortcut** field in the main window and press a new
+combination to change it; **Reset** restores the default. The choice is stored in `UserDefaults`
+(`com.local.snipframe`). A combination must include ⌘, ⌥ or ⌃ (function keys excepted).
 
-## Kurulum
+## Build
 
-Gereksinim: macOS 13+, Xcode Command Line Tools (Swift 5.9+).
+Requirements: macOS 13+, Xcode Command Line Tools (Swift 5.9+).
 
 ```bash
-./scripts/build-app.sh          # build/SnipFrame.app üretir
-open build/SnipFrame.app         # uygulamayı başlatır
+./scripts/build-app.sh          # produces build/SnipFrame.app
+open build/SnipFrame.app        # launches the app
 ```
 
-> Uygulamayı `/Applications` klasörüne taşıyabilirsiniz. Derleme sonrası ad-hoc imza
-> yenilendiğinde macOS ekran kaydı iznini yeniden isteyebilir; bu normaldir.
+> You can move the app into `/Applications`. When the ad-hoc signature changes after a rebuild,
+> macOS may ask for Screen Recording permission again; that is expected.
 
-### Ekran Kaydı izni
+### Screen Recording permission
 
-İlk yakalamada macOS izin ister. Vermezseniz veya reddederseniz:
+The first capture triggers a macOS permission prompt. If you deny it or miss it:
 
-**Sistem Ayarları → Gizlilik ve Güvenlik → Ekran Kaydı → SnipFrame** açılır, ardından
-uygulamayı kapatıp yeniden açın.
+Open **System Settings → Privacy & Security → Screen Recording → SnipFrame**, then quit and
+relaunch the app.
 
-## Kullanım
+## Usage
 
-- Dock'taki **SnipFrame** simgesine (veya menü çubuğundaki **viewfinder** simgesine) tıklayıp
-  **Bölge / Pencere / Tam Ekran** düğmelerinden birini seçin; ana pencereden uygulamaya girmeden
-  **⌘⇧X** ile de bölge seçimine girebilirsiniz. Ana pencere kapalıyken Dock simgesine tıklamak onu geri getirir.
-- Bölge modunda: sürükleyip bırakın → editör açılır. `Esc` iptal, `Enter` onay.
-- Pencere modunda: istediğiniz pencerenin üzerine gelip tıklayın.
-- Editörde: araç seçin, çizin; `⌘C` kopyala, `⌘S` kaydet, `⌘Z` geri al, `Esc` kapat.
-  Metin aracında tıklayıp yazın, `Enter` ile yerleştirin.
+- Click the **SnipFrame** icon in the Dock (or the **viewfinder** icon in the menu bar) and choose
+  **Region / Window / Full Screen**, or press **⌘⇧X** from anywhere to start a region selection.
+  Clicking the Dock icon brings the main window back when it is closed.
+- Region mode: drag and release → the editor opens. `Esc` cancels, `Enter` confirms.
+- Window mode: hover the window you want and click.
+- In the editor: pick a tool and draw; `⌘C` copies, `⌘S` saves, `⌘Z` undoes, `Esc` closes.
+  With the text tool, click, type and press `Enter` to place the text.
 
-## Proje yapısı
+## Project layout
 
 ```
-Package.swift                       SwiftPM paketi (macOS 13+)
-Resources/Info.plist                .app paketi için Info.plist
-Resources/AppIconSource.png          logo kaynağı
-Resources/AppIcon.icns              uygulama simgesi (betikle üretilir)
-Resources/AppGlyph.png              ana pencere rozeti (betikle üretilir)
-Resources/*.lproj                   yerelleştirme dosyaları (en, tr, de, fr, es)
-scripts/build-app.sh                derleme + .app paketleme + ad-hoc imza
+Package.swift                       SwiftPM package (macOS 13+)
+Resources/Info.plist                Info.plist for the .app bundle
+Resources/AppIconSource.png         logo source
+Resources/AppIcon.icns              app icon (generated by script)
+Resources/AppGlyph.png              main-window badge (generated by script)
+Resources/*.lproj                   localization files (en, tr, de, fr, es)
+scripts/build-app.sh                build + .app assembly + ad-hoc signing
 Sources/SnipFrame/
-  main.swift                        uygulama girişi (regular policy — Dock simgesi)
-  AppDelegate.swift                 ana pencere, menü çubuğu, kısayol, akışlar, izinler
-  MainWindowController.swift        ana pencere düzeni (başlık, eylemler, gecikme)
-  Controls.swift                    özel çizilmiş düğme/kart bileşenleri + marka renkleri
-  Localization.swift                L() yardımcısı (sistem dili)
-  Shortcut.swift                    kısayol modeli, tuş adları, UserDefaults
-  ShortcutRecorderButton.swift      kısayol kaydetme alanı
-  HotkeyManager.swift               Carbon global kısayol
-  ScreenCaptureService.swift        ekran yakalama + TCC izin yardımcıları
-  CaptureOverlay.swift              karartma, bölge/pencere seçimi, büyüteç
-  EditorWindowController.swift      editör penceresi, araç çubuğu, kopyala/kaydet
-  EditorCanvasView.swift            tuval, çizim girdisi, metin, undo, export
-  CanvasRenderer.swift              anotasyon modeli + ortak çizim motoru
-  CanvasContainerView.swift         kaydırma için flipped kapsayıcı
+  main.swift                        app entry point (regular policy — Dock icon)
+  AppDelegate.swift                 main window, menu bar item, shortcut, flows, permissions
+  MainWindowController.swift        main-window layout (header, actions, tools, delay)
+  Controls.swift                    custom-drawn button/card components + brand palette
+  Localization.swift                L() helper (system language)
+  Shortcut.swift                    shortcut model, key names, UserDefaults
+  ShortcutRecorderButton.swift      shortcut recorder field
+  HotkeyManager.swift               Carbon global shortcut
+  ScreenCaptureService.swift        screen capture + TCC permission helpers
+  CaptureOverlay.swift              dimming, region/window selection, loupe
+  EditorWindowController.swift      editor window, toolbar, copy/save
+  EditorCanvasView.swift            canvas, drawing input, text, undo, export
+  CanvasRenderer.swift              annotation model + shared drawing engine
+  CanvasContainerView.swift         flipped container for scrolling
 ```
 
-## Bilinen sınırlar
+## Known limitations
 
-- Serbest (lasso) seçim ve kayıt (video) yok — bkz. `PLAN.md` yol haritası.
-- Global kısayol sabittir (⌘⇧X); kullanıcı tarafından değiştirilemez.
-- Uygulama imzası ad-hoc olduğu için ilk dağıtımda Gatekeeper uyarısı çıkabilir.
+- No free-form (lasso) selection and no video recording — see the roadmap in `PLAN.md`.
+- The app is ad-hoc signed, so Gatekeeper may warn on first launch.
