@@ -8,9 +8,14 @@ cd "$ROOT"
 CONFIG="release"
 APP="build/SnipFrame.app"
 
-swift build -c "$CONFIG" --product SnipFrame
-
-BIN_PATH="$(swift build -c "$CONFIG" --show-bin-path)/SnipFrame"
+# Evrensel derleme: aynı .app hem Apple Silicon (arm64) hem Intel (x86_64) Mac'lerde çalışır.
+if swift build -c "$CONFIG" --arch arm64 --arch x86_64 --product SnipFrame; then
+    BIN_PATH="$(swift build -c "$CONFIG" --arch arm64 --arch x86_64 --show-bin-path)/SnipFrame"
+else
+    echo "Uyarı: evrensel derleme başarısız, yalnızca bu makinenin mimarisi derleniyor." >&2
+    swift build -c "$CONFIG" --product SnipFrame
+    BIN_PATH="$(swift build -c "$CONFIG" --show-bin-path)/SnipFrame"
+fi
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
@@ -31,6 +36,7 @@ done
 # Ad-hoc signature: gives the bundle a stable identity for the Screen Recording permission.
 codesign --force --sign - "$APP" >/dev/null 2>&1 || true
 
+echo "Mimari: $(lipo -archs "$APP/Contents/MacOS/SnipFrame")"
 echo "Hazır: $APP"
 echo "Çalıştır: open \"$APP\""
 

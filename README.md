@@ -43,6 +43,8 @@ combination to change it; **Reset** restores the default. The choice is stored i
 ## Build
 
 Requirements: macOS 13+, Xcode Command Line Tools (Swift 5.9+).
+`scripts/build-app.sh` produces a universal app (Apple Silicon + Intel), so the same
+bundle runs natively on both.
 
 ```bash
 ./scripts/build-app.sh          # produces build/SnipFrame.app
