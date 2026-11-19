@@ -69,15 +69,14 @@ public partial class InstallWindow : Window
         SetBusy(true);
         _installedPath = directory;
 
-        var progress = new Progress<InstallProgress>(state =>
-        {
-            Progress.Value = Math.Clamp(state.Fraction, 0, 1) * 100;
-            ProgressText.Text = state.Text;
-        });
+        var desktopShortcut = DesktopShortcut.IsChecked == true;
+        var version = _version;
+        var progress = new Progress<InstallProgress>(ApplyProgress);
 
         try
         {
-            await Task.Run(() => Installer.Install(directory, DesktopShortcut.IsChecked == true, _version, progress));
+            // The shortcut step drives Shell COM, which is single-threaded apartment only.
+            await RunInStaThread(() => Installer.Install(directory, desktopShortcut, version, progress));
             ShowDone();
         }
         catch (Exception error)
@@ -87,6 +86,46 @@ public partial class InstallWindow : Window
                 Text.T("Installation failed", "Kurulum başarısız oldu"),
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+    }
+
+    private void ApplyProgress(InstallProgress state)
+    {
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.BeginInvoke(() => ApplyProgress(state));
+            return;
+        }
+
+        Progress.Value = Math.Clamp(state.Fraction, 0, 1) * 100;
+        ProgressText.Text = state.Text;
+    }
+
+    /// <summary>Runs the installer on a dedicated STA thread and surfaces its exception to the caller.</summary>
+    private static Task RunInStaThread(Action work)
+    {
+        var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                work();
+                completion.SetResult();
+            }
+            catch (Exception error)
+            {
+                completion.SetException(error);
+            }
+        })
+        {
+            IsBackground = true,
+            Name = "SnipFrame installer"
+        };
+
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+
+        return completion.Task;
     }
 
     private void SetBusy(bool busy)

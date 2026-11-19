@@ -37,14 +37,14 @@ internal static class Installer
                 "Kurulum paketinde uygulama dosyaları eksik."));
         }
 
-        progress.Report(new InstallProgress(Text.T("Creating shortcuts…", "Kısayollar oluşturuluyor…"), 0.9));
+        progress.Report(new InstallProgress(Text.T("Registering the app…", "Uygulama kaydediliyor…"), 0.9));
+        RegisterUninstall(directory, executable, version);
+        RegisterAppPath(executable);
+
+        progress.Report(new InstallProgress(Text.T("Creating shortcuts…", "Kısayollar oluşturuluyor…"), 0.96));
         CreateShortcut(StartMenuShortcut(), executable, directory);
         if (desktopShortcut) CreateShortcut(DesktopShortcut(), executable, directory);
         else TryDelete(DesktopShortcut());
-
-        progress.Report(new InstallProgress(Text.T("Registering the app…", "Uygulama kaydediliyor…"), 0.96));
-        RegisterUninstall(directory, executable, version);
-        RegisterAppPath(executable);
 
         progress.Report(new InstallProgress(Text.T("Finished", "Tamamlandı"), 1));
     }
@@ -176,8 +176,24 @@ internal static class Installer
         }
     }
 
-    /// <summary>Creates a .lnk through the Windows Script Host COM object.</summary>
+    /// <summary>
+    /// Creates a .lnk through the Windows Script Host COM object. Must run on an STA thread:
+    /// the shell's shortcut object is apartment-bound and fails from thread-pool threads.
+    /// Shortcuts are best effort; the app is already registered by the time they are created.
+    /// </summary>
     private static void CreateShortcut(string linkPath, string targetPath, string workingDirectory)
+    {
+        try
+        {
+            WriteShortcut(linkPath, targetPath, workingDirectory);
+        }
+        catch
+        {
+            // A missing shortcut must never fail the installation.
+        }
+    }
+
+    private static void WriteShortcut(string linkPath, string targetPath, string workingDirectory)
     {
         var shellType = Type.GetTypeFromProgID("WScript.Shell");
         if (shellType is null) return;
