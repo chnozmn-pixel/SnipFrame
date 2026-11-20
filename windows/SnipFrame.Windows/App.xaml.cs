@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -107,13 +108,13 @@ public partial class App : Application
     private void BeginCapture(CaptureMode mode)
     {
         HideMainWindow();
-        RunWithDelay(() => ShowOverlay(mode));
+        RunWithDelay(() => SettleDesktop(() => ShowOverlay(mode)));
     }
 
     private void CaptureFullScreen()
     {
         HideMainWindow();
-        RunWithDelay(() =>
+        RunWithDelay(() => SettleDesktop(() =>
         {
             var monitor = CaptureService.GetMonitorAtCursor();
             var image = CaptureService.Capture(monitor.Bounds);
@@ -124,7 +125,31 @@ public partial class App : Application
             }
 
             ShowEditor(image);
-        });
+        }));
+    }
+
+    /// <summary>
+    /// A hidden window still sits in the compositor for a frame, so a screenshot taken straight
+    /// after Hide() contains the app itself. Flush the compositor and give it one more frame.
+    /// </summary>
+    private void SettleDesktop(Action action)
+    {
+        try
+        {
+            DwmFlush();
+        }
+        catch
+        {
+            // No compositor (basic or remote display): the timer below still covers the gap.
+        }
+
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(120) };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            action();
+        };
+        timer.Start();
     }
 
     private void ShowOverlay(CaptureMode mode)
@@ -212,6 +237,9 @@ public partial class App : Application
     {
         if (_main is { IsVisible: true }) _main.Hide();
     }
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmFlush();
 
     private void Quit()
     {
