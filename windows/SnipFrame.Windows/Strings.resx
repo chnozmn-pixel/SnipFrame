@@ -24,6 +24,7 @@
   <data name="action.fullScreen" xml:space="preserve"><value>Full Screen</value></data>
   <data name="action.fullScreen.hint" xml:space="preserve"><value>Capture the whole display</value></data>
   <data name="action.reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="action.archive" xml:space="preserve"><value>Archive</value></data>
 
   <data name="label.tool" xml:space="preserve"><value>Tool</value></data>
   <data name="label.delay" xml:space="preserve"><value>Delay</value></data>
@@ -54,6 +55,7 @@
   <data name="editor.undo" xml:space="preserve"><value>Undo (Ctrl+Z)</value></data>
   <data name="editor.redo" xml:space="preserve"><value>Redo (Ctrl+Y)</value></data>
   <data name="editor.copied" xml:space="preserve"><value>Copied to clipboard ✓</value></data>
+  <data name="editor.copiedArchived" xml:space="preserve"><value>Copied to clipboard · saved to archive ✓</value></data>
   <data name="editor.saved" xml:space="preserve"><value>Saved ✓</value></data>
   <data name="editor.color" xml:space="preserve"><value>Color</value></data>
   <data name="editor.lineWidth" xml:space="preserve"><value>Line width</value></data>

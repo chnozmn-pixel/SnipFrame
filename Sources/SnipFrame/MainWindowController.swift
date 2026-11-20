@@ -19,7 +19,7 @@ final class MainWindowController: NSWindowController {
 
     init() {
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 486, height: 418),
+            contentRect: NSRect(x: 0, y: 0, width: 486, height: 448),
             styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
@@ -189,7 +189,30 @@ final class MainWindowController: NSWindowController {
         shortcutRow.alignment = .centerY
         shortcutRow.spacing = 8
 
-        let footer = NSStackView(views: [delayRow, shortcutRow])
+        // Arşiv: tarihli olarak kaydedilen yakalamaların klasörü.
+        let archiveButton = NSButton(
+            title: L("action.archive", "Archive"),
+            target: self,
+            action: #selector(openArchive)
+        )
+        archiveButton.bezelStyle = .rounded
+        archiveButton.controlSize = .small
+        archiveButton.font = .systemFont(ofSize: 11)
+        archiveButton.image = NSImage(systemSymbolName: "folder", accessibilityDescription: nil)
+        archiveButton.imagePosition = .imageLeading
+        archiveButton.toolTip = CaptureArchive.folderPath
+        archiveButton.translatesAutoresizingMaskIntoConstraints = false
+
+        let archiveSpacer = NSView()
+        archiveSpacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        archiveSpacer.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        let archiveRow = NSStackView(views: [archiveButton, archiveSpacer])
+        archiveRow.orientation = .horizontal
+        archiveRow.alignment = .centerY
+        archiveRow.spacing = 8
+
+        let footer = NSStackView(views: [delayRow, shortcutRow, archiveRow])
         footer.orientation = .vertical
         footer.alignment = .leading
         footer.spacing = 8
@@ -220,7 +243,8 @@ final class MainWindowController: NSWindowController {
             footer.widthAnchor.constraint(equalTo: stack.widthAnchor),
             toolRow.widthAnchor.constraint(equalTo: stack.widthAnchor),
             delayRow.widthAnchor.constraint(equalTo: footer.widthAnchor),
-            shortcutRow.widthAnchor.constraint(equalTo: footer.widthAnchor)
+            shortcutRow.widthAnchor.constraint(equalTo: footer.widthAnchor),
+            archiveRow.widthAnchor.constraint(equalTo: footer.widthAnchor)
         ])
     }
 
@@ -236,6 +260,7 @@ final class MainWindowController: NSWindowController {
     @objc private func startRegion() { onRegion?() }
     @objc private func startWindow() { onWindowCapture?() }
     @objc private func startFullScreen() { onFullScreen?() }
+    @objc private func openArchive() { CaptureArchive.openFolder() }
     @objc private func resetShortcut() {
         shortcutRecorder.setShortcutText(Shortcut.default.displayString)
         onShortcutReset?()

@@ -4,6 +4,7 @@
 "action.window.caption" = "Tek bir pencereyi al";
 "action.fullScreen" = "Tam Ekran";
 "action.fullScreen.caption" = "Ekranın tamamını al";
+"action.archive" = "Arşiv";
 
 "label.tool" = "Araç";
 "label.delay" = "Gecikme";
@@ -51,6 +52,7 @@
 "editor.copy.tooltip" = "Görüntüyü panoya kopyala (⌘C)";
 "editor.save.tooltip" = "PNG olarak kaydet (⌘S)";
 "editor.copied" = "Panoya kopyalandı ✓";
+"editor.copiedArchived" = "Panoya kopyalandı · arşive kaydedildi ✓";
 "editor.saveFailed" = "Kaydedilemedi";
 "editor.textPlaceholder" = "Metin yazıp Enter'a bas";
 "editor.lineWidth" = "Çizgi kalınlığı";

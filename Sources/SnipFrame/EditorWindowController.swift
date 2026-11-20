@@ -302,6 +302,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
         }
     }
 
+    /// Ham yakalama Arşiv klasörüne de yazıldığında durum satırını bilgilendirir.
+    func announceArchivedCapture() {
+        flash(L("editor.copiedArchived", "Copied to clipboard · saved to archive ✓"))
+    }
+
     private func flash(_ text: String) {
         statusLabel.stringValue = text
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(clearStatus), object: nil)

@@ -4,6 +4,7 @@
 "action.window.caption" = "Capture a single window";
 "action.fullScreen" = "Full Screen";
 "action.fullScreen.caption" = "Capture the whole display";
+"action.archive" = "Archive";
 
 "label.tool" = "Tool";
 "label.delay" = "Delay";
@@ -51,6 +52,7 @@
 "editor.copy.tooltip" = "Copy image to clipboard (⌘C)";
 "editor.save.tooltip" = "Save as PNG (⌘S)";
 "editor.copied" = "Copied to clipboard ✓";
+"editor.copiedArchived" = "Copied to clipboard · saved to archive ✓";
 "editor.saveFailed" = "Could not save";
 "editor.textPlaceholder" = "Type and press Enter";
 "editor.lineWidth" = "Line width";

@@ -313,6 +313,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Kırpma biter bitmez ham görüntü panoya yazılır; düzenlenirse Kopyala ile yenilenir.
         controller.copyImage()
+
+        // Her yakalama ayrıca tarihli bir PNG olarak Arşiv klasörüne kaydedilir.
+        if CaptureArchive.save(image) != nil {
+            controller.announceArchivedCapture()
+        }
     }
 
     // MARK: - İzinler

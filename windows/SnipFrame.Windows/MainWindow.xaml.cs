@@ -59,6 +59,9 @@ public partial class MainWindow : Window
         LanguageLabel.Text = L.T("label.language", "Language");
         ResetButton.Content = L.T("action.reset", "Reset");
 
+        ArchiveLabel.Text = L.T("action.archive", "Archive");
+        ArchiveButton.ToolTip = Archive.Folder;
+
         ShortcutText.Text = CurrentHotkeyText();
 
         BuildToolButtons();
@@ -125,6 +128,8 @@ public partial class MainWindow : Window
     private void OnWindowCardClick(object sender, RoutedEventArgs e) => WindowRequested?.Invoke();
 
     private void OnFullCardClick(object sender, RoutedEventArgs e) => FullScreenRequested?.Invoke();
+
+    private void OnArchiveClick(object sender, RoutedEventArgs e) => Archive.OpenFolder();
 
     // ---------- settings ----------
 

@@ -144,16 +144,19 @@ public partial class EditorWindow : Window
 
     /// <summary>
     /// A fresh capture is already on the clipboard when the editor opens; once something is drawn
-    /// the Copy button (or Ctrl+C) has to put the edited image there.
+    /// the Copy button (or Ctrl+C) has to put the edited image there. <paramref name="archived"/>
+    /// tells the status line that the raw capture was written to the archive folder as well.
     /// </summary>
-    public void CopyCapturedImage()
+    public void CopyCapturedImage(bool archived = false)
     {
         if (Surface.BaseImage is null) return;
 
         try
         {
             Clipboard.SetImage(Surface.BaseImage);
-            Flash(L.T("editor.copied", "Copied to clipboard ✓"));
+            Flash(archived
+                ? L.T("editor.copiedArchived", "Copied to clipboard · saved to archive ✓")
+                : L.T("editor.copied", "Copied to clipboard ✓"));
         }
         catch
         {

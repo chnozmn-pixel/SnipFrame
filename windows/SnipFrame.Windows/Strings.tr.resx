@@ -23,6 +23,7 @@
   <data name="action.fullScreen" xml:space="preserve"><value>Tam Ekran</value></data>
   <data name="action.fullScreen.hint" xml:space="preserve"><value>Tüm ekranı yakala</value></data>
   <data name="action.reset" xml:space="preserve"><value>Sıfırla</value></data>
+  <data name="action.archive" xml:space="preserve"><value>Arşiv</value></data>
 
   <data name="label.tool" xml:space="preserve"><value>Araç</value></data>
   <data name="label.delay" xml:space="preserve"><value>Gecikme</value></data>
@@ -53,6 +54,7 @@
   <data name="editor.undo" xml:space="preserve"><value>Geri al (Ctrl+Z)</value></data>
   <data name="editor.redo" xml:space="preserve"><value>Yinele (Ctrl+Y)</value></data>
   <data name="editor.copied" xml:space="preserve"><value>Panoya kopyalandı ✓</value></data>
+  <data name="editor.copiedArchived" xml:space="preserve"><value>Panoya kopyalandı · arşive kaydedildi ✓</value></data>
   <data name="editor.saved" xml:space="preserve"><value>Kaydedildi ✓</value></data>
   <data name="editor.color" xml:space="preserve"><value>Renk</value></data>
   <data name="editor.lineWidth" xml:space="preserve"><value>Çizgi kalınlığı</value></data>

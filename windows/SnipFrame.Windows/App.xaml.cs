@@ -215,8 +215,11 @@ public partial class App : Application
         editor.Show();
         editor.Activate();
 
+        // Every capture also lands in the archive folder with a dated name.
+        var archived = Archive.Save(image) is not null;
+
         // A finished crop goes straight to the clipboard; the Copy button is for edited versions.
-        editor.CopyCapturedImage();
+        editor.CopyCapturedImage(archived);
     }
 
     private void ShowCaptureError()
