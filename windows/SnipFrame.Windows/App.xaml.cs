@@ -214,6 +214,9 @@ public partial class App : Application
         editor.Closed += (_, _) => _windows.Remove(editor);
         editor.Show();
         editor.Activate();
+
+        // A finished crop goes straight to the clipboard; the Copy button is for edited versions.
+        editor.CopyCapturedImage();
     }
 
     private void ShowCaptureError()

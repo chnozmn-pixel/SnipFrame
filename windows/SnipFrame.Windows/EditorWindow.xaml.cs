@@ -142,6 +142,25 @@ public partial class EditorWindow : Window
 
     private void OnCopyClick(object sender, RoutedEventArgs e) => CopyToClipboard();
 
+    /// <summary>
+    /// A fresh capture is already on the clipboard when the editor opens; once something is drawn
+    /// the Copy button (or Ctrl+C) has to put the edited image there.
+    /// </summary>
+    public void CopyCapturedImage()
+    {
+        if (Surface.BaseImage is null) return;
+
+        try
+        {
+            Clipboard.SetImage(Surface.BaseImage);
+            Flash(L.T("editor.copied", "Copied to clipboard ✓"));
+        }
+        catch
+        {
+            // The clipboard can be locked by another app; the Copy button stays available.
+        }
+    }
+
     private void CopyToClipboard()
     {
         var bitmap = Surface.RenderBitmap();

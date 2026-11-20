@@ -26,6 +26,10 @@ public sealed class CaptureOverlayWindow : Window
     private const int SwpNoActivate = 0x0010;
     private const int WsExToolWindow = 0x00000080;
     private const int WmDpiChanged = 0x02E0;
+    private const int WhKeyboardLl = 13;
+    private const int WmKeyDown = 0x0100;
+    private const int WmSysKeyDown = 0x0104;
+    private const int VkEscape = 0x1B;
     private static readonly IntPtr HwndTopmost = new(-1);
 
     private readonly CaptureMode _mode;
@@ -33,6 +37,9 @@ public sealed class CaptureOverlayWindow : Window
     private readonly BitmapSource _screenshot;
     private readonly OverlaySurface _surface = new();
     private readonly DispatcherTimer _placementTimer;
+
+    private HookProc? _escapeHookProc;
+    private IntPtr _escapeHook;
 
     private Point? _start;
     private Point? _current;
@@ -99,6 +106,7 @@ public sealed class CaptureOverlayWindow : Window
 
         if (PresentationSource.FromVisual(this) is HwndSource source) source.AddHook(WndProc);
 
+        InstallEscapeHook();
         PlaceWindow();
     }
 
@@ -109,7 +117,42 @@ public sealed class CaptureOverlayWindow : Window
         WatchPlacement();
         Activate();
         Focus();
+        Keyboard.Focus(this);
         _surface.InvalidateVisual();
+    }
+
+    /// <summary>
+    /// Esc has to cancel even when the overlay never got keyboard focus (the capture can be started
+    /// from the tray or a global hotkey), so a low-level hook watches for it while the overlay is up.
+    /// </summary>
+    private void InstallEscapeHook()
+    {
+        if (_escapeHook != IntPtr.Zero) return;
+
+        _escapeHookProc = OnEscapeHook;
+        _escapeHook = SetWindowsHookEx(WhKeyboardLl, _escapeHookProc, GetModuleHandle(null), 0);
+    }
+
+    private void RemoveEscapeHook()
+    {
+        if (_escapeHook == IntPtr.Zero) return;
+
+        UnhookWindowsHookEx(_escapeHook);
+        _escapeHook = IntPtr.Zero;
+        _escapeHookProc = null;
+    }
+
+    private IntPtr OnEscapeHook(int code, IntPtr wParam, IntPtr lParam)
+    {
+        if (code >= 0 &&
+            (wParam == (IntPtr)WmKeyDown || wParam == (IntPtr)WmSysKeyDown) &&
+            Marshal.ReadInt32(lParam) == VkEscape)
+        {
+            Dispatcher.BeginInvoke(new Action(() => Finish(null)));
+            return new IntPtr(1);
+        }
+
+        return CallNextHookEx(_escapeHook, code, wParam, lParam);
     }
 
     private IntPtr WndProc(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -178,6 +221,8 @@ public sealed class CaptureOverlayWindow : Window
         _start = PointerDip();
         _current = _start;
         CaptureMouse();
+        Focus();
+        Keyboard.Focus(this);
         SyncSurface();
     }
 
@@ -244,6 +289,7 @@ public sealed class CaptureOverlayWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
+        RemoveEscapeHook();
         if (!_finished) Cancelled?.Invoke();
     }
 
@@ -355,6 +401,20 @@ public sealed class CaptureOverlayWindow : Window
 
     [DllImport("user32.dll")]
     private static extern bool GetWindowRect(IntPtr hwnd, out RECT rect);
+
+    private delegate IntPtr HookProc(int code, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr SetWindowsHookEx(int idHook, HookProc callback, IntPtr module, uint threadId);
+
+    [DllImport("user32.dll")]
+    private static extern bool UnhookWindowsHookEx(IntPtr hook);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr CallNextHookEx(IntPtr hook, int code, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+    private static extern IntPtr GetModuleHandle(string? moduleName);
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
     private static extern IntPtr GetWindowLongPtr(IntPtr hwnd, int index);

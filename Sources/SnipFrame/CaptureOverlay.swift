@@ -17,6 +17,7 @@ final class CaptureOverlayController {
 
     private var overlayWindow: OverlayWindow?
     private var overlayView: OverlayView?
+    private var escapeMonitor: Any?
 
     init(screen: NSScreen,
          screenshot: NSImage,
@@ -62,6 +63,13 @@ final class CaptureOverlayController {
         window.makeKeyAndOrderFront(nil)
         window.makeFirstResponder(view)
         NSCursor.crosshair.push()
+
+        // Odak kaybolsa bile Esc iptal etsin: pencereye değil, uygulamaya gelen tuşlara bakılır.
+        escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self, event.keyCode == 53 else { return event }
+            self.cancel()
+            return nil
+        }
     }
 
     private func finish(rect: NSRect) {
@@ -97,6 +105,10 @@ final class CaptureOverlayController {
     }
 
     private func dismiss() {
+        if let escapeMonitor {
+            NSEvent.removeMonitor(escapeMonitor)
+            self.escapeMonitor = nil
+        }
         NSCursor.pop()
         overlayWindow?.orderOut(nil)
         overlayWindow = nil

@@ -310,6 +310,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         controller.showWindow(nil)
         controller.window?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+
+        // Kırpma biter bitmez ham görüntü panoya yazılır; düzenlenirse Kopyala ile yenilenir.
+        controller.copyImage()
     }
 
     // MARK: - İzinler

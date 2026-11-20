@@ -10,6 +10,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
     private var statusLabel: NSTextField!
     private var undoButton: NSButton!
     private var redoButton: NSButton!
+    private var escapeMonitor: Any?
 
     var onClose: (() -> Void)?
 
@@ -162,6 +163,30 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
 
         updateHistoryButtons()
         window.makeFirstResponder(canvas)
+        installEscapeMonitor()
+    }
+
+    /// Esc, odak araç çubuğunda ya da başka bir kontrolde olsa da pencereyi kapatır.
+    /// Yazı aracı düzenleniyorken Esc önce yazıyı iptal eder (alan editörüne bırakılır).
+    private func installEscapeMonitor() {
+        guard escapeMonitor == nil else { return }
+        escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self, let window = self.window, window.isKeyWindow, event.keyCode == 53 else {
+                return event
+            }
+            if let editor = window.firstResponder as? NSTextView, editor.isFieldEditor {
+                return event
+            }
+            window.performClose(nil)
+            return nil
+        }
+    }
+
+    private func removeEscapeMonitor() {
+        if let escapeMonitor {
+            NSEvent.removeMonitor(escapeMonitor)
+            self.escapeMonitor = nil
+        }
     }
 
     private func historyButton(symbol: String, tooltip: String, action: Selector) -> NSButton {
@@ -311,6 +336,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, Editor
     // MARK: - NSWindowDelegate
 
     func windowWillClose(_ notification: Notification) {
+        removeEscapeMonitor()
         onClose?()
     }
 }
