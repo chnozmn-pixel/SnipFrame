@@ -34,6 +34,12 @@ public static class CaptureService
         return new MonitorInfo(new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height), ScaleAt(cursor.X, cursor.Y));
     }
 
+    /// <summary>Pointer position in physical screen pixels (unaffected by window scaling).</summary>
+    public static Point CursorPosition()
+    {
+        return GetCursorPos(out var point) ? new Point(point.X, point.Y) : new Point(0, 0);
+    }
+
     public static MonitorInfo GetPrimaryMonitor()
     {
         var screen = Forms.Screen.PrimaryScreen ?? Forms.Screen.AllScreens[0];
@@ -229,6 +235,9 @@ public static class CaptureService
 
     [DllImport("dwmapi.dll")]
     private static extern int DwmGetWindowAttribute(IntPtr hwnd, int attribute, out int value, int size);
+
+    [DllImport("user32.dll")]
+    private static extern bool GetCursorPos(out POINT point);
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetDC(IntPtr hwnd);

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace SnipFrame;
 
@@ -24,16 +25,19 @@ public sealed class CaptureOverlayWindow : Window
     private const int GwlExStyle = -20;
     private const int SwpNoActivate = 0x0010;
     private const int WsExToolWindow = 0x00000080;
+    private const int WmDpiChanged = 0x02E0;
     private static readonly IntPtr HwndTopmost = new(-1);
 
     private readonly CaptureMode _mode;
     private readonly Rect _desktop;
     private readonly BitmapSource _screenshot;
     private readonly OverlaySurface _surface = new();
+    private readonly DispatcherTimer _placementTimer;
 
     private Point? _start;
     private Point? _current;
     private Rect? _hoverPhysical;
+    private int _placementTicks;
     private bool _finished;
 
     /// <summary>Raised with the cropped bitmap, in image pixels.</summary>
@@ -61,6 +65,19 @@ public sealed class CaptureOverlayWindow : Window
         _surface.Image = screenshot;
         Content = _surface;
 
+        // Windows resizes a window when the monitor DPI changes and WPF applies that suggestion,
+        // which can shrink the overlay back onto a single monitor. Re-assert the rectangle for a
+        // moment after showing so the overlay always ends up covering the whole virtual screen.
+        _placementTimer = new DispatcherTimer(DispatcherPriority.Send)
+        {
+            Interval = TimeSpan.FromMilliseconds(40)
+        };
+        _placementTimer.Tick += (_, _) =>
+        {
+            EnsurePlacement();
+            if (--_placementTicks <= 0) _placementTimer.Stop();
+        };
+
         // Initial DIP placement; the exact physical rectangle is applied once the handle exists.
         var scale = dpiScale <= 0 ? 1.0 : dpiScale;
         Left = desktop.X / scale;
@@ -80,6 +97,8 @@ public sealed class CaptureOverlayWindow : Window
         var style = GetWindowLongPtr(handle, GwlExStyle).ToInt64();
         SetWindowLongPtr(handle, GwlExStyle, new IntPtr(style | WsExToolWindow));
 
+        if (PresentationSource.FromVisual(this) is HwndSource source) source.AddHook(WndProc);
+
         PlaceWindow();
     }
 
@@ -87,9 +106,47 @@ public sealed class CaptureOverlayWindow : Window
     {
         base.OnContentRendered(e);
         PlaceWindow();
+        WatchPlacement();
         Activate();
         Focus();
         _surface.InvalidateVisual();
+    }
+
+    private IntPtr WndProc(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (message == WmDpiChanged)
+        {
+            // Let WPF finish its own handling first, then put the coverage back.
+            Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action(() =>
+            {
+                PlaceWindow();
+                WatchPlacement();
+            }));
+        }
+
+        return IntPtr.Zero;
+    }
+
+    private void WatchPlacement()
+    {
+        _placementTicks = 40;
+        _placementTimer.Start();
+    }
+
+    /// <summary>Restores the virtual-screen rectangle if something (WPF, DPI change) moved or resized us.</summary>
+    private void EnsurePlacement()
+    {
+        var handle = new WindowInteropHelper(this).Handle;
+        if (handle == IntPtr.Zero) return;
+        if (!GetWindowRect(handle, out var current)) return;
+
+        var matches =
+            Math.Abs(current.Left - _desktop.X) <= 1 &&
+            Math.Abs(current.Top - _desktop.Y) <= 1 &&
+            Math.Abs(current.Right - (_desktop.X + _desktop.Width)) <= 1 &&
+            Math.Abs(current.Bottom - (_desktop.Y + _desktop.Height)) <= 1;
+
+        if (!matches) PlaceWindow();
     }
 
     /// <summary>WPF applies its own placement while showing; re-assert the physical rectangle afterwards.</summary>
@@ -118,7 +175,7 @@ public sealed class CaptureOverlayWindow : Window
             return;
         }
 
-        _start = e.GetPosition(_surface);
+        _start = PointerDip();
         _current = _start;
         CaptureMouse();
         SyncSurface();
@@ -127,7 +184,7 @@ public sealed class CaptureOverlayWindow : Window
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
-        var position = e.GetPosition(_surface);
+        var position = PointerDip();
 
         if (_mode == CaptureMode.Window)
         {
@@ -237,6 +294,26 @@ public sealed class CaptureOverlayWindow : Window
         return AnnotationRenderer.RectFrom(start, current);
     }
 
+    /// <summary>
+    /// Surface DIPs per physical pixel. The frozen snapshot covers the whole window, so this ratio
+    /// maps overlay space onto screen pixels no matter which monitor the window DPI came from.
+    /// </summary>
+    private double DipScale => _surface.ActualWidth <= 0
+        ? 1.0
+        : _surface.ActualWidth / Math.Max(1, _screenshot.PixelWidth);
+
+    /// <summary>
+    /// Pointer position in surface DIPs, read from physical screen coordinates. WPF's own position
+    /// is expressed in the window DPI, which jumps when a drag crosses into a differently scaled
+    /// monitor; physical coordinates keep the selection continuous across both screens.
+    /// </summary>
+    private Point PointerDip()
+    {
+        var physical = CaptureService.CursorPosition();
+        var scale = DipScale;
+        return new Point((physical.X - _desktop.X) * scale, (physical.Y - _desktop.Y) * scale);
+    }
+
     /// <summary>Overlay DIPs → bitmap pixels (origin of the snapshot is the virtual-screen origin).</summary>
     private Int32Rect ToImageRect(Rect dip)
     {
@@ -264,8 +341,20 @@ public sealed class CaptureOverlayWindow : Window
             physical.Height / scale);
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
     [DllImport("user32.dll")]
     private static extern bool SetWindowPos(IntPtr hwnd, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
+
+    [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(IntPtr hwnd, out RECT rect);
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
     private static extern IntPtr GetWindowLongPtr(IntPtr hwnd, int index);
