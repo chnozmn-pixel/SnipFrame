@@ -180,7 +180,7 @@
         <!-- Saved captures: every snip is archived under a dated name. -->
         <Button x:Name="ArchiveButton" Style="{StaticResource SecondaryButton}"
                 Height="32" Margin="0,16,0,0"
-                Click="OnArchiveClick">
+                Click="OnArchiveClick" ToolTipOpening="OnArchiveToolTipOpening">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Path Data="{StaticResource Icon.Folder}"
                       Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"

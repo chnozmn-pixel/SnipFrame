@@ -131,6 +131,10 @@ public partial class MainWindow : Window
 
     private void OnArchiveClick(object sender, RoutedEventArgs e) => Archive.OpenFolder();
 
+    /// <summary>Windows may keep the archive in another folder, so the path is read live.</summary>
+    private void OnArchiveToolTipOpening(object sender, ToolTipEventArgs e) =>
+        ArchiveButton.ToolTip = Archive.Folder;
+
     // ---------- settings ----------
 
     private void OnToolClick(object sender, RoutedEventArgs e)
